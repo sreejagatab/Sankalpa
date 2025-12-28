@@ -1,0 +1,14 @@
+{
+    "name": "Blog Platform",
+    "description": "A markdown-based blog app with login, tests, and CI",
+    "agents": [
+      "frontend_builder",
+      "backend_builder",
+      "auth_builder",
+      "db_schema",
+      "markdown_editor",
+      "test_suite",
+      "ci_generator",
+      "deploy_executor"
+    ]
+  }

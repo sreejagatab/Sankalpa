@@ -1,0 +1,10 @@
+{
+  "chain_builder_chain_project_architect": {
+    "message": "Project structure initialized for 'sankalpa_project'",
+    "files": {
+      "projects/sankalpa_project/backend/__init__.py": "",
+      "projects/sankalpa_project/frontend/pages/index.tsx": "",
+      "projects/sankalpa_project/tests/__init__.py": ""
+    }
+  }
+}

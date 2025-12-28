@@ -1,0 +1,11 @@
+{
+  "mock1": {
+    "result": "Output from mock1"
+  },
+  "error_agent": {
+    "result": "Output from mock1"
+  },
+  "mock2": {
+    "result": "Output from mock2"
+  }
+}

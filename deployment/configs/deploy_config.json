@@ -1,0 +1,12 @@
+{
+  "platform": "azure",
+  "project_type": "next",
+  "project_path": "./frontend",
+  "env_vars": {
+    "NODE_ENV": "production",
+    "API_URL": "https://api.example.com"
+  },
+  "region": "us-east-1",
+  "domain": "example.com",
+  "timestamp": "$(date +%Y%m%d_%H%M%S)"
+}

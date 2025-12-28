@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(pip install:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(cmd /c \"cd /d G:\\\\mcp\\\\sankalpa\\\\frontend && npm install\")",
+      "Bash(powershell -Command \"Set-Location ''G:\\\\mcp\\\\sankalpa\\\\frontend''; npm install 2>&1 | Select-Object -Last 30\")",
+      "Bash(powershell:*)",
+      "Bash(curl:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

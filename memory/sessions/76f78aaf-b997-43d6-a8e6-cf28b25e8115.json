@@ -1,0 +1,9 @@
+{
+  "chain_greeting_chain_hello_world": {
+    "greeting": "Hello, Sankalpa User!"
+  },
+  "chain_greeting_chain_date_formatter": {
+    "error": "Missing required input: date",
+    "status": "error"
+  }
+}

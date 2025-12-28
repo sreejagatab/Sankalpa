@@ -1,0 +1,10 @@
+[
+    { "id": "1", "label": "Agent planner" },
+    { "id": "2", "label": "Agent frontend_builder" },
+    { "id": "3", "label": "Agent backend_builder" },
+    { "id": "4", "label": "Agent auth_builder" },
+    { "id": "5", "label": "Agent db_schema" },
+    { "id": "6", "label": "Agent markdown_editor" },
+    { "id": "7", "label": "Agent test_suite" },
+    { "id": "8", "label": "Agent deploy_executor" }
+  ]

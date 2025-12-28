@@ -1,0 +1,22 @@
+{
+  "project_architect_test": {
+    "message": "Project structure initialized for 'test_project'",
+    "files": {
+      "projects/test_project/backend/__init__.py": "",
+      "projects/test_project/frontend/pages/index.tsx": "",
+      "projects/test_project/tests/__init__.py": ""
+    }
+  },
+  "project_architect": {
+    "message": "Project structure initialized for 'test_chain_project'",
+    "files": {
+      "projects/test_chain_project/backend/__init__.py": "",
+      "projects/test_chain_project/frontend/pages/index.tsx": "",
+      "projects/test_chain_project/tests/__init__.py": ""
+    }
+  },
+  "code_summarizer": {
+    "error": "Missing required input: code",
+    "status": "error"
+  }
+}

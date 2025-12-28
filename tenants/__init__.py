@@ -1,0 +1,1 @@
+# Multi-tenant module for organization management
