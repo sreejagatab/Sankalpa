@@ -1,8 +1,0 @@
-{
-  "mock1": {
-    "result": "Output from mock1"
-  },
-  "error_agent": {
-    "result": "Success after retry"
-  }
-}
