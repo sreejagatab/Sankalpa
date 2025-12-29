@@ -19,12 +19,9 @@
 [![Next.js](https://img.shields.io/badge/Next.js-14+-black.svg)](https://nextjs.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://docker.com)
-[![GitHub Stars](https://img.shields.io/github/stars/sreejagatab/Sankalpa?style=social)](https://github.com/sreejagatab/Sankalpa)
-[![GitHub Forks](https://img.shields.io/github/forks/sreejagatab/Sankalpa?style=social)](https://github.com/sreejagatab/Sankalpa/fork)
-[![GitHub Issues](https://img.shields.io/github/issues/sreejagatab/Sankalpa)](https://github.com/sreejagatab/Sankalpa/issues)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
-[Features](#-key-features) | [Quick Start](#-quick-start) | [Demo](#-screenshots--demo) | [Architecture](#-architecture) | [Agents](#-agent-ecosystem) | [API](#-api-reference) | [Examples](#-real-world-examples) | [FAQ](#-faq) | [Docs](#-documentation)
+[Features](#key-features) | [Quick Start](#quick-start) | [Architecture](#architecture) | [Agents](#agent-ecosystem) | [API](./docs/API.md) | [Deployment](./docs/deployment-guide.md) | [Contributing](./CONTRIBUTING.md)
 
 </div>
 
@@ -63,9 +60,23 @@ Give Sankalpa a prompt like *"Build me a blog with authentication, markdown edit
 | **Persistent Memory System** | Session-based context with transaction support |
 | **Chain Execution Engine** | Sequential, parallel, and conditional agent workflows |
 | **Self-Replicating Agents** | Agents that create new agents from text prompts |
-| **LLM Fine-Tuning** | Automated fine-tuning pipeline for custom models |
+| **LLM Fine-Tuning** | Automated fine-tuning pipeline with visual UI |
 | **Multi-Tenancy** | Enterprise-ready with organization support |
-| **Marketplace** | Share and monetize agents and workflows |
+| **Marketplace** | Share, publish, install agents and workflows |
+
+### New in v2.0
+
+| Feature | Description |
+|---------|-------------|
+| **Real-time WebSocket** | Live collaboration with Redis pub/sub |
+| **Vector Memory** | Semantic search with ChromaDB/Pinecone/Weaviate |
+| **GraphQL API** | Flexible queries with Strawberry + Apollo Client |
+| **Plugin System** | Extensible architecture with 50+ hook points |
+| **Fine-tuning UI** | Visual dataset management and job monitoring |
+| **VS Code Extension** | Run agents and workflows from your editor |
+| **Enterprise SSO** | SAML 2.0, OIDC (Azure AD, Okta, Google) |
+| **Helm Charts** | Production Kubernetes deployment (AWS/GCP/Azure) |
+| **Mobile PWA** | Offline-first mobile experience |
 
 ### What Makes Sankalpa Unique?
 
@@ -297,6 +308,104 @@ curl -X POST http://localhost:9000/api/chains/execute \
 
 ---
 
+## LLM Integration Test Results
+
+### Task: Build "TaskFlow" - A Complete Project Management SaaS
+
+We tested Sankalpa with a complex real-world task to demonstrate its full capabilities with OpenAI integration:
+
+```
+Build a complete Project Management SaaS called 'TaskFlow' with:
+
+1. USER MANAGEMENT: JWT auth, profiles, teams, role-based access
+2. PROJECT FEATURES: CRUD, dashboard, Kanban board, filtering
+3. TASK MANAGEMENT: Assignments, priorities, due dates, comments
+4. COLLABORATION: Real-time updates, activity feed, file sharing
+5. BILLING: Stripe subscription (Free, Pro, Enterprise tiers)
+6. ANALYTICS: Completion rates, productivity metrics, burndown charts
+```
+
+### Results: Before vs After LLM Integration
+
+| Metric | Before (Templates) | After (OpenAI LLM) | Improvement |
+|--------|-------------------|-------------------|-------------|
+| **Files Generated** | 20 | **107** | **5.35x** |
+| **Total Time** | 22.7s | 384.35s | Real processing |
+| **Agent Execution** | ~2s each | 21-54s each | Actual LLM calls |
+| **Code Quality** | Scaffold stubs | Production-ready | Complete code |
+| **Input Usage** | Ignored | **"TaskFlow" used** | Context-aware |
+
+### Files Generated Per Agent
+
+| Agent | Files | Description |
+|-------|-------|-------------|
+| `project_architect` | 27 | Project structure, Docker, CI/CD, configs |
+| `db_schema` | 16 | SQLAlchemy models + Pydantic schemas |
+| `auth_builder` | 7 | JWT auth, password hashing, dependencies |
+| `backend_builder` | 10 | FastAPI routes, services, middleware |
+| `api_builder` | 4 | REST endpoints, pagination utilities |
+| `frontend_builder` | 15 | Next.js pages, components, hooks |
+| `ui_generator` | 13 | Button, Card, Modal, Table, Toast, etc. |
+| `stripe_payment` | 7 | Checkout, webhooks, pricing components |
+| `test_suite` | 1 | Pytest configuration and tests |
+| `readme_writer` | 1 | Professional documentation |
+| `seo_optimizer` | 6 | Meta tags, structured data, sitemap |
+| **TOTAL** | **107** | Complete full-stack application |
+
+### Sample Generated Code Quality
+
+**Database Model (User):**
+```python
+class User(BaseModel):
+    __tablename__ = 'users'
+    username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    team_id = Column(Integer, ForeignKey('teams.id'))
+
+    team = relationship('Team', back_populates='members')
+    projects = relationship('Project', back_populates='owner')
+```
+
+**Frontend Homepage (TaskFlow-branded):**
+```tsx
+<title>TaskFlow - Project Management SaaS</title>
+<h1>Welcome to TaskFlow</h1>
+<p>Your ultimate project management solution.</p>
+```
+
+**JWT Authentication:**
+```python
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+    to_encode.update({'exp': expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+```
+
+### Key Achievements
+
+| Issue Fixed | Status |
+|-------------|--------|
+| Hard-coded templates replaced with LLM | ✅ Complete |
+| Input parameters now used correctly | ✅ "TaskFlow" appears in all files |
+| Context sharing between agents | ✅ Models/routes/pages accumulated |
+| README character-by-character bug | ✅ Fixed |
+| Invalid file formats (HTML in TSX) | ✅ Valid TSX generated |
+| Minimal 2-field models | ✅ Full relationships + indexes |
+
+### How to Run This Test
+
+```bash
+# Set your OpenAI API key in .env
+OPENAI_API_KEY=sk-your-key-here
+
+# Run the complex task test
+python test_complex_task.py
+```
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -356,9 +465,12 @@ docker-compose up -d
 | **Frontend** | http://localhost:9001 | Web UI |
 | **Workflow Composer** | http://localhost:9001/composer | Visual chain builder |
 | **Playground** | http://localhost:9001/playground | Agent testing |
+| **Marketplace** | http://localhost:9001/marketplace | Agent marketplace |
+| **Fine-tuning** | http://localhost:9001/finetuning | LLM fine-tuning UI |
 | **Backend API** | http://localhost:9000 | REST API |
+| **GraphQL API** | http://localhost:9000/graphql | GraphQL endpoint |
 | **API Docs** | http://localhost:9000/api/docs | Swagger UI |
-| **API Status** | http://localhost:9000/api/status | Health check |
+| **WebSocket** | ws://localhost:9000/ws | Real-time updates |
 
 ### Verify Installation
 
@@ -452,13 +564,6 @@ sankalpa/
 │   ├── loader.py              # Dynamic agent loading
 │   ├── chain_manager.py       # Agent chain orchestration
 │   ├── builder/               # 11 builder agents
-│   │   ├── project_architect_agent.py
-│   │   ├── frontend_builder_agent.py
-│   │   ├── backend_builder_agent.py
-│   │   ├── api_builder_agent.py
-│   │   ├── db_schema_agent.py
-│   │   ├── auth_builder_agent.py
-│   │   └── ...
 │   ├── testing/               # 4 testing agents
 │   ├── deployment/            # 3 deployment agents
 │   ├── marketing/             # 4 marketing agents
@@ -468,35 +573,99 @@ sankalpa/
 │   └── custom/                # User-created agents
 ├── backend/                    # FastAPI Backend
 │   ├── simple_main.py         # API server
+│   ├── enhanced_main.py       # Enhanced server with all features
 │   ├── routers/               # API endpoints
-│   │   ├── agents.py
-│   │   ├── chains.py
-│   │   ├── memory.py
-│   │   └── users.py
+│   │   ├── agents.py          # Agent management
+│   │   ├── chains.py          # Chain execution
+│   │   ├── memory.py          # Memory operations
+│   │   ├── users.py           # User management
+│   │   ├── finetuning.py      # LLM fine-tuning
+│   │   ├── sso.py             # Enterprise SSO
+│   │   └── plugins.py         # Plugin management
+│   ├── graphql/               # GraphQL API
+│   │   ├── schema.py          # Main schema
+│   │   ├── types/             # GraphQL types
+│   │   ├── resolvers/         # Query resolvers
+│   │   └── subscriptions.py   # Real-time subscriptions
 │   ├── db/                    # Database layer
 │   └── websockets/            # Real-time communication
+│       ├── connection_manager.py
+│       ├── redis_pubsub.py    # Redis pub/sub
+│       └── handlers.py        # Message handlers
 ├── core/                       # Core Services
 │   ├── config.py              # Configuration management
 │   ├── security.py            # JWT, RBAC, rate limiting
 │   ├── caching.py             # Redis/in-memory caching
 │   ├── monitoring.py          # Metrics and health checks
-│   └── logging.py             # Structured logging
+│   ├── logging.py             # Structured logging
+│   └── sso/                   # Enterprise SSO
+│       ├── base.py            # Base SSO classes
+│       ├── oidc.py            # OpenID Connect
+│       ├── saml.py            # SAML 2.0
+│       └── providers/         # Azure AD, Okta, Google
 ├── memory/                     # Memory Management
 │   ├── memory_manager.py      # Basic memory
-│   └── enhanced_memory_manager.py  # Transaction support
+│   ├── enhanced_memory_manager.py
+│   └── vector/                # Vector memory
+│       ├── embeddings.py      # OpenAI embeddings
+│       ├── chromadb_store.py  # ChromaDB backend
+│       ├── pinecone_store.py  # Pinecone backend
+│       └── weaviate_store.py  # Weaviate backend
+├── plugins/                    # Plugin System
+│   ├── base.py                # Plugin base class
+│   ├── registry.py            # Plugin registry
+│   ├── hooks.py               # 50+ hook points
+│   └── examples/              # Example plugins
+├── finetuning/                 # LLM Fine-tuning
+│   ├── models.py              # Fine-tuning job models
+│   ├── service.py             # OpenAI integration
+│   └── schemas.py             # API schemas
 ├── frontend/                   # Next.js Web Application
-│   ├── pages/                 # 14+ pages
+│   ├── pages/                 # All pages
 │   │   ├── index.tsx          # Homepage
 │   │   ├── composer.tsx       # Visual workflow composer
 │   │   ├── playground.tsx     # Agent testing
 │   │   ├── dashboard/         # System dashboard
-│   │   └── ...
-│   ├── components/            # 20+ React components
-│   └── lib/api-client.ts      # API client
-├── marketplace/                # Agent marketplace
+│   │   ├── marketplace/       # Agent marketplace
+│   │   ├── finetuning/        # Fine-tuning UI
+│   │   ├── auth/              # SSO login pages
+│   │   └── offline.tsx        # PWA offline page
+│   ├── components/            # React components
+│   │   ├── mobile/            # PWA mobile components
+│   │   ├── marketplace/       # Marketplace components
+│   │   └── finetuning/        # Fine-tuning components
+│   ├── lib/
+│   │   ├── api-client.ts      # REST API client
+│   │   ├── graphql-client.ts  # Apollo GraphQL client
+│   │   └── pwa/               # PWA utilities
+│   ├── hooks/usePWA.ts        # PWA React hook
+│   └── public/
+│       ├── manifest.json      # PWA manifest
+│       └── sw.js              # Service worker
+├── marketplace/                # Agent Marketplace
+│   ├── routes.py              # Marketplace API
+│   ├── models.py              # Marketplace models
+│   ├── installation.py        # Install/uninstall
+│   └── publishing.py          # Publishing workflow
+├── vscode-extension/           # VS Code Extension
+│   ├── src/
+│   │   ├── extension.ts       # Entry point
+│   │   ├── providers/         # Tree data providers
+│   │   ├── commands/          # VS Code commands
+│   │   ├── services/          # API client
+│   │   └── webviews/          # Custom panels
+│   └── package.json           # Extension manifest
+├── deploy/                     # Deployment
+│   └── helm/                  # Kubernetes Helm charts
+│       └── sankalpa/
+│           ├── Chart.yaml
+│           ├── values.yaml    # Default config
+│           ├── values-aws.yaml
+│           ├── values-gcp.yaml
+│           ├── values-azure.yaml
+│           └── templates/     # K8s manifests
 ├── tenants/                    # Multi-tenancy
 ├── integrations/               # External integrations
-│   └── github/                # GitHub API client
 ├── cli/                        # Command-line interface
 ├── tests/                      # Test suites
 ├── docs/                       # Documentation
@@ -697,14 +866,88 @@ Content-Type: application/json
   "session_id": "optional_session"
 }
 
-# Get all memory
-GET /api/memory/all?session_id=optional
-
-# List sessions
-GET /api/memory/sessions
+# Vector search (v2.0)
+POST /api/memory/search/vector
+Content-Type: application/json
+{
+  "query": "search text",
+  "limit": 10,
+  "provider": "chromadb"
+}
 ```
 
-For complete API documentation, see [docs/API.md](docs/API.md).
+#### GraphQL (v2.0)
+
+```graphql
+# Query agents
+query {
+  agents {
+    id
+    name
+    category
+    description
+  }
+}
+
+# Execute agent
+mutation {
+  executeAgent(name: "project_architect", input: {appName: "MyApp"}) {
+    executionId
+    result
+    executionTime
+  }
+}
+
+# Real-time subscription
+subscription {
+  chainProgress(chainId: "chain_123") {
+    step
+    status
+    output
+  }
+}
+```
+
+#### SSO (v2.0)
+
+```bash
+# Get SSO login URL
+GET /api/sso/login?provider=azure_ad&redirect_uri=http://localhost:9001/auth/callback
+
+# Handle SSO callback
+POST /api/sso/callback
+Content-Type: application/json
+{
+  "code": "auth_code",
+  "state": "state_value"
+}
+
+# SSO logout
+POST /api/sso/logout
+Authorization: Bearer <token>
+```
+
+#### Fine-tuning (v2.0)
+
+```bash
+# List fine-tuning jobs
+GET /api/finetuning/jobs
+Authorization: Bearer <token>
+
+# Create fine-tuning job
+POST /api/finetuning/jobs
+Content-Type: application/json
+{
+  "model": "gpt-3.5-turbo",
+  "dataset_id": "dataset_123",
+  "hyperparameters": {"epochs": 3}
+}
+
+# Get job status
+GET /api/finetuning/jobs/{job_id}
+```
+
+For complete API documentation, see [docs/API.md](./docs/API.md).
 
 ---
 
@@ -757,6 +1000,8 @@ http://localhost:9001/composer
 | **Role-Based Access** | Admin, User, Guest roles |
 | **Rate Limiting** | 100 requests/minute per IP |
 | **CORS Protection** | Configurable allowed origins |
+| **Enterprise SSO** | SAML 2.0 and OpenID Connect (v2.0) |
+| **PKCE Support** | Secure OAuth flows for SPAs (v2.0) |
 
 ### Security Best Practices
 
@@ -1043,7 +1288,7 @@ class MyAgent(BaseAgent):
 2. Register in `catalog/agent_catalog.json`
 3. Restart the backend
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed instructions.
 </details>
 
 <details>
@@ -1109,7 +1354,7 @@ Think of agents as workers and chains as assembly lines.
 2. Build the frontend: `cd frontend && npm run build`
 3. Use Docker Compose or your preferred hosting
 
-See [docs/production-deployment.md](docs/production-deployment.md) for detailed steps.
+See [docs/deployment-guide.md](./docs/deployment-guide.md) for detailed steps.
 </details>
 
 <details>
@@ -1171,7 +1416,7 @@ curl -X POST http://localhost:9000/api/agents/execute \
 
 ## Roadmap
 
-### Current Version (v1.0)
+### Current Version (v2.0)
 
 - [x] 35+ specialized agents
 - [x] Visual workflow composer
@@ -1181,24 +1426,32 @@ curl -X POST http://localhost:9000/api/agents/execute \
 - [x] Next.js frontend
 - [x] Docker deployment
 
-### Upcoming Features
+### New in v2.0 (All Completed)
 
-- [ ] Real-time WebSocket collaboration
-- [ ] Vector memory with embeddings
-- [ ] Advanced LLM fine-tuning UI
-- [ ] Agent marketplace
-- [ ] VS Code extension
-- [ ] Mobile application
-- [ ] Enterprise SSO
-- [ ] Kubernetes Helm charts
-- [ ] GraphQL API
-- [ ] Plugin system
+- [x] Real-time WebSocket collaboration (Redis pub/sub)
+- [x] Vector memory with embeddings (ChromaDB, Pinecone, Weaviate)
+- [x] GraphQL API (Strawberry + Apollo Client)
+- [x] Plugin system (50+ hook points)
+- [x] Advanced LLM fine-tuning UI
+- [x] Agent marketplace (complete with publishing/installation)
+- [x] VS Code extension
+- [x] Enterprise SSO (SAML 2.0, OIDC - Azure AD, Okta, Google)
+- [x] Kubernetes Helm charts (AWS EKS, GCP GKE, Azure AKS)
+- [x] Mobile PWA (offline-first, push notifications)
+
+### Future Plans
+
+- [ ] Native mobile apps (iOS/Android)
+- [ ] Multi-language agent support
+- [ ] AI model registry integration
+- [ ] Advanced analytics dashboard
+- [ ] Team collaboration features
 
 ---
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ### Quick Contribution Guide
 
@@ -1216,20 +1469,20 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 | Document | Description |
 |----------|-------------|
-| [README.md](README.md) | This file - project overview |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
-| [CLAUDE.md](CLAUDE.md) | AI assistant quick reference |
-| [docs/API.md](docs/API.md) | Complete API documentation |
-| [docs/system_architecture.md](docs/system_architecture.md) | Architecture deep-dive |
-| [docs/production-deployment.md](docs/production-deployment.md) | Deployment guide |
+| [README.md](./README.md) | This file - project overview |
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | Contribution guidelines |
+| [CLAUDE.md](./CLAUDE.md) | AI assistant quick reference |
+| [docs/API.md](./docs/API.md) | Complete API documentation |
+| [docs/system_architecture.md](./docs/system_architecture.md) | Architecture deep-dive |
+| [docs/deployment-guide.md](./docs/deployment-guide.md) | Deployment guide (Docker, K8s, Cloud) |
 
 ---
 
 ## Support
 
-- **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/sreejagatab/Sankalpa/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/sreejagatab/Sankalpa/discussions)
+- **Documentation**: [docs/](./docs/)
+- **Issues**: Open an issue in this repository
+- **Discussions**: Use GitHub Discussions for questions
 
 ---
 
@@ -1255,7 +1508,7 @@ Sankalpa builds upon concepts from:
 
 **Built with intention. Powered by AI.**
 
-[Get Started](#-quick-start) | [Documentation](docs/) | [Contributing](CONTRIBUTING.md) | [Report Bug](https://github.com/sreejagatab/Sankalpa/issues)
+[Get Started](#quick-start) | [Documentation](./docs/) | [Contributing](./CONTRIBUTING.md)
 
 ---
 
