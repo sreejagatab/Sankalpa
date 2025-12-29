@@ -20,10 +20,142 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://docker.com)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![Agents](https://img.shields.io/badge/Agents-35+-purple.svg)](#agent-ecosystem)
+[![OpenAI](https://img.shields.io/badge/OpenAI-Integrated-412991.svg)](#llm-integration)
 
-[Features](#key-features) | [Quick Start](#quick-start) | [Architecture](#architecture) | [Agents](#agent-ecosystem) | [API](./docs/API.md) | [Deployment](./docs/deployment-guide.md) | [Contributing](./CONTRIBUTING.md)
+**[Features](#-key-features)** | **[Quick Start](#-quick-start)** | **[Architecture](#-system-architecture)** | **[Agents](#-agent-ecosystem)** | **[API](./docs/API.md)** | **[Deployment](./docs/deployment-guide.md)**
 
 </div>
+
+---
+
+## Table of Contents
+
+<details>
+<summary><b>Click to expand full Table of Contents</b></summary>
+
+### Overview
+- [What is Sankalpa?](#-what-is-sankalpa)
+- [Key Features](#-key-features)
+- [What Makes Sankalpa Unique](#what-makes-sankalpa-unique)
+- [Version 2.0 Features](#new-in-version-20)
+
+### Getting Started
+- [Quick Start](#-quick-start)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Running Sankalpa](#run-sankalpa)
+- [Access Points](#access-points)
+- [Verify Installation](#verify-installation)
+
+### Architecture
+- [System Architecture](#-system-architecture)
+- [High-Level Overview](#high-level-architecture-diagram)
+- [Component Architecture](#component-architecture)
+- [Data Flow Diagrams](#-data-flow-diagrams)
+- [Request Lifecycle](#request-lifecycle)
+- [Agent Execution Pipeline](#agent-execution-pipeline)
+- [Chain Execution Flow](#chain-execution-flow)
+- [Memory System Flow](#memory-system-flow)
+- [Directory Structure](#directory-structure)
+
+### Agent Ecosystem
+- [Agent Ecosystem Overview](#-agent-ecosystem)
+- [Agent Categories](#agent-categories-overview)
+- [Builder Agents (11)](#-builder-agents-11)
+- [Testing Agents (4)](#-testing-agents-4)
+- [Deployment Agents (3)](#-deployment-agents-3)
+- [Marketing Agents (4)](#-marketing-agents-4)
+- [Enhanced Agents (6)](#-enhanced-agents-6)
+- [Meta Agents (2)](#-meta-agents-2)
+- [Orchestration Agents (3)](#-orchestration-agents-3)
+- [Custom Agents](#-custom-agents)
+- [Creating Custom Agents](#creating-a-custom-agent)
+
+### Core Components
+- [Backend API](#-backend-api)
+- [Frontend Application](#-frontend-application)
+- [Memory System](#-memory-system)
+- [Chain Manager](#-chain-manager)
+- [LLM Integration](#-llm-integration)
+- [Plugin System](#-plugin-system)
+
+### API Reference
+- [API Overview](#-api-reference)
+- [Authentication](#authentication)
+- [Agents API](#agents-api)
+- [Chains API](#chains-api)
+- [Memory API](#memory-api)
+- [GraphQL API](#graphql-api)
+- [WebSocket API](#websocket-api)
+- [SSO API](#sso-api)
+- [Fine-tuning API](#fine-tuning-api)
+
+### Visual Interfaces
+- [Workflow Composer](#-visual-workflow-composer)
+- [Agent Playground](#agent-playground)
+- [Dashboard](#dashboard)
+- [Marketplace](#marketplace)
+- [Fine-tuning UI](#fine-tuning-ui)
+
+### Test Results & Benchmarks
+- [LLM Integration Test Results](#-llm-integration-test-results)
+- [Performance Benchmarks](#performance-benchmarks)
+- [Test Coverage](#test-coverage)
+
+### Real-World Examples
+- [Example 1: Complete Blog Platform](#example-1-build-a-complete-blog-platform)
+- [Example 2: REST API Generation](#example-2-generate-a-rest-api)
+- [Example 3: SaaS Dashboard](#example-3-create-a-saas-dashboard)
+- [Example 4: Mobile-Ready PWA](#example-4-build-a-mobile-ready-pwa)
+- [Example 5: Marketing Materials](#example-5-generate-marketing-materials)
+
+### Security
+- [Security Overview](#-security)
+- [Authentication & Authorization](#authentication--authorization)
+- [Security Best Practices](#security-best-practices)
+- [Enterprise SSO](#enterprise-sso)
+
+### Configuration
+- [Environment Variables](#-configuration)
+- [Security Configuration](#security-configuration)
+- [Database Configuration](#database-configuration)
+- [LLM Configuration](#llm-configuration)
+
+### Deployment
+- [Docker Deployment](#-deployment)
+- [Kubernetes (Helm)](#kubernetes-deployment-helm)
+- [Cloud Deployment](#cloud-deployment)
+- [Production Checklist](#production-checklist)
+
+### Integrations & Protocols
+- [Supported Protocols](#-protocols--integrations)
+- [External Integrations](#external-integrations)
+
+### Troubleshooting
+- [Common Issues](#-troubleshooting)
+- [Debug Mode](#debug-mode)
+- [Getting Help](#getting-help)
+
+### FAQ
+- [General Questions](#general-questions)
+- [Technical Questions](#technical-questions)
+- [Deployment Questions](#deployment-questions)
+
+### Development
+- [Contributing](#-contributing)
+- [Adding New Agents](#adding-a-new-agent)
+- [Development Setup](#development-setup)
+- [Testing](#testing)
+
+### Resources
+- [Documentation](#-documentation)
+- [Roadmap](#-roadmap)
+- [Support](#-support)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
+
+</details>
 
 ---
 
@@ -34,374 +166,130 @@
 ### The Vision
 
 ```
-User Prompt → Planner Agent → Builder Agents → Test Agents → Deploy Agent → Live Application
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           SANKALPA: FROM PROMPT TO PRODUCTION                    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│   "Build me a blog with auth, markdown editor, and dark mode"                   │
+│                              │                                                   │
+│                              ▼                                                   │
+│   ┌──────────────────────────────────────────────────────────────────────────┐  │
+│   │                         SANKALPA ORCHESTRATION                            │  │
+│   │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐       │  │
+│   │  │ Planner │─▶│ Builder │─▶│ Testing │─▶│ Deploy  │─▶│Marketing│       │  │
+│   │  │  Agent  │  │ Agents  │  │ Agents  │  │ Agents  │  │ Agents  │       │  │
+│   │  └─────────┘  └─────────┘  └─────────┘  └─────────┘  └─────────┘       │  │
+│   └──────────────────────────────────────────────────────────────────────────┘  │
+│                              │                                                   │
+│                              ▼                                                   │
+│   ┌──────────────────────────────────────────────────────────────────────────┐  │
+│   │  OUTPUTS:                                                                 │  │
+│   │  [x] Next.js Frontend    [x] FastAPI Backend    [x] PostgreSQL Schema    │  │
+│   │  [x] JWT Authentication  [x] Markdown Editor    [x] Dark Mode Toggle     │  │
+│   │  [x] Unit Tests          [x] E2E Tests          [x] CI/CD Pipeline       │  │
+│   │  [x] Vercel Deployment   [x] README.md          [x] SEO Optimization     │  │
+│   └──────────────────────────────────────────────────────────────────────────┘  │
+│                              │                                                   │
+│                              ▼                                                   │
+│                     LIVE APPLICATION DEPLOYED                                    │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Give Sankalpa a prompt like *"Build me a blog with authentication, markdown editor, and dark mode"* and watch it:
 
-1. **Plan** the architecture and module structure
-2. **Generate** frontend (Next.js), backend (FastAPI), and database schemas
-3. **Create** authentication with JWT tokens
-4. **Build** UI components with Tailwind CSS
-5. **Write** unit and integration tests
-6. **Deploy** to Vercel/AWS/GCP
-7. **Generate** documentation and marketing materials
+| Step | Agent | Action | Output |
+|------|-------|--------|--------|
+| 1 | `planner_agent` | Plan architecture | Module structure, tech stack |
+| 2 | `project_architect` | Create project structure | Folder hierarchy, configs |
+| 3 | `db_schema` | Design database | SQLAlchemy models, migrations |
+| 4 | `backend_builder` | Build API server | FastAPI routes, middleware |
+| 5 | `auth_builder` | Create authentication | JWT tokens, login/signup |
+| 6 | `frontend_builder` | Generate UI | Next.js pages, components |
+| 7 | `ui_generator` | Build components | Buttons, forms, layouts |
+| 8 | `test_suite` | Write tests | Unit tests, integration tests |
+| 9 | `deploy_executor` | Deploy application | Vercel/AWS/GCP deployment |
+| 10 | `readme_writer` | Generate docs | Professional README |
+| 11 | `seo_optimizer` | Optimize SEO | Meta tags, sitemap |
 
 ---
 
 ## Key Features
 
-### Core Capabilities
-
-| Feature | Description |
-|---------|-------------|
-| **35+ Specialized AI Agents** | Builder, testing, deployment, marketing, and meta agents |
-| **Visual Workflow Composer** | Drag-and-drop agent chain builder with React Flow |
-| **Persistent Memory System** | Session-based context with transaction support |
-| **Chain Execution Engine** | Sequential, parallel, and conditional agent workflows |
-| **Self-Replicating Agents** | Agents that create new agents from text prompts |
-| **LLM Fine-Tuning** | Automated fine-tuning pipeline with visual UI |
-| **Multi-Tenancy** | Enterprise-ready with organization support |
-| **Marketplace** | Share, publish, install agents and workflows |
-
-### New in v2.0
-
-| Feature | Description |
-|---------|-------------|
-| **Real-time WebSocket** | Live collaboration with Redis pub/sub |
-| **Vector Memory** | Semantic search with ChromaDB/Pinecone/Weaviate |
-| **GraphQL API** | Flexible queries with Strawberry + Apollo Client |
-| **Plugin System** | Extensible architecture with 50+ hook points |
-| **Fine-tuning UI** | Visual dataset management and job monitoring |
-| **VS Code Extension** | Run agents and workflows from your editor |
-| **Enterprise SSO** | SAML 2.0, OIDC (Azure AD, Okta, Google) |
-| **Helm Charts** | Production Kubernetes deployment (AWS/GCP/Azure) |
-| **Mobile PWA** | Offline-first mobile experience |
-
-### What Makes Sankalpa Unique?
+### Core Capabilities Matrix
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         SANKALPA CAPABILITIES                           │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │
-│  │   Planning   │  │   Building   │  │   Testing    │                  │
-│  │   ────────   │  │   ────────   │  │   ────────   │                  │
-│  │ • Task plan  │  │ • Frontend   │  │ • Unit tests │                  │
-│  │ • Arch design│  │ • Backend    │  │ • E2E tests  │                  │
-│  │ • Workflow   │  │ • Database   │  │ • Security   │                  │
-│  └──────────────┘  └──────────────┘  └──────────────┘                  │
-│                                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │
-│  │  Deploying   │  │  Marketing   │  │   Enhanced   │                  │
-│  │  ──────────  │  │  ──────────  │  │  ──────────  │                  │
-│  │ • CI/CD      │  │ • README     │  │ • Self-rep   │                  │
-│  │ • Cloud      │  │ • SEO        │  │ • Fine-tune  │                  │
-│  │ • Domain     │  │ • Pitch deck │  │ • Copilot    │                  │
-│  └──────────────┘  └──────────────┘  └──────────────┘                  │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           SANKALPA CAPABILITIES MATRIX                           │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│  AGENTS           WORKFLOWS         MEMORY           DEPLOYMENT                  │
+│  ═══════          ═════════         ══════           ══════════                  │
+│  [x] 35+ Agents   [x] Visual UI     [x] Sessions     [x] Docker                  │
+│  [x] Categories   [x] Drag-Drop     [x] Persist      [x] K8s Helm                │
+│  [x] Custom       [x] Templates     [x] Vector DB    [x] AWS/GCP                 │
+│  [x] Self-Rep     [x] Export        [x] Transactions [x] Vercel                  │
+│                                                                                  │
+│  API              SECURITY          ENTERPRISE       INTEGRATIONS                │
+│  ═══              ════════          ══════════       ════════════                │
+│  [x] REST         [x] JWT Auth      [x] Multi-Tenant [x] OpenAI                  │
+│  [x] GraphQL      [x] RBAC          [x] SSO (SAML)   [x] GitHub                  │
+│  [x] WebSocket    [x] Rate Limit    [x] Org Support  [x] Stripe                  │
+│  [x] OpenAPI      [x] CORS          [x] Audit Logs   [x] SendGrid                │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
+### Feature Comparison Table
 
-## Screenshots & Demo
+| Feature | Description | Status |
+|---------|-------------|--------|
+| **35+ Specialized AI Agents** | Builder, testing, deployment, marketing, and meta agents | ✅ Complete |
+| **Visual Workflow Composer** | Drag-and-drop agent chain builder with React Flow | ✅ Complete |
+| **Persistent Memory System** | Session-based context with transaction support | ✅ Complete |
+| **Chain Execution Engine** | Sequential, parallel, and conditional agent workflows | ✅ Complete |
+| **Self-Replicating Agents** | Agents that create new agents from text prompts | ✅ Complete |
+| **LLM Fine-Tuning** | Automated fine-tuning pipeline with visual UI | ✅ Complete |
+| **Multi-Tenancy** | Enterprise-ready with organization support | ✅ Complete |
+| **Marketplace** | Share, publish, install agents and workflows | ✅ Complete |
+| **OpenAI Integration** | GPT-4o-mini powered code generation | ✅ Complete |
+| **Context Sharing** | Agents share context through chain execution | ✅ Complete |
 
-### Visual Workflow Composer
+### New in Version 2.0
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  SANKALPA WORKFLOW COMPOSER                                    [─][□][×]│
-├─────────────────────────────────────────────────────────────────────────┤
-│ ┌─────────────┐                                                         │
-│ │ AGENTS      │    ┌──────────┐      ┌──────────┐      ┌──────────┐   │
-│ ├─────────────┤    │ Project  │─────▶│ Frontend │─────▶│  Deploy  │   │
-│ │ ○ Architect │    │ Architect│      │ Builder  │      │ Executor │   │
-│ │ ○ Frontend  │    └──────────┘      └──────────┘      └──────────┘   │
-│ │ ○ Backend   │          │                                    │        │
-│ │ ○ Database  │          │           ┌──────────┐             │        │
-│ │ ○ Auth      │          └──────────▶│ Backend  │─────────────┘        │
-│ │ ○ Deploy    │                      │ Builder  │                      │
-│ │ ○ Test      │                      └──────────┘                      │
-│ └─────────────┘                                                         │
-│                                                                         │
-│ [▶ Run Chain]  [💾 Save]  [📤 Export]                    Agents: 4     │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+| Feature | Description | Technology |
+|---------|-------------|------------|
+| **Real-time WebSocket** | Live collaboration with pub/sub | Redis + WebSocket |
+| **Vector Memory** | Semantic search capabilities | ChromaDB/Pinecone/Weaviate |
+| **GraphQL API** | Flexible queries and mutations | Strawberry + Apollo Client |
+| **Plugin System** | Extensible architecture | 50+ hook points |
+| **Fine-tuning UI** | Visual dataset management | React + OpenAI API |
+| **VS Code Extension** | Editor integration | TypeScript Extension API |
+| **Enterprise SSO** | Single sign-on support | SAML 2.0, OIDC |
+| **Helm Charts** | Kubernetes deployment | AWS EKS/GCP GKE/Azure AKS |
+| **Mobile PWA** | Offline-first mobile | Service Workers + IndexedDB |
+| **LLM Integration** | Real AI-powered generation | OpenAI GPT-4o-mini |
 
-### Agent Playground
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  AGENT PLAYGROUND                                              [─][□][×]│
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  Select Agent: [project_architect     ▼]                               │
-│                                                                         │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ INPUT                                                            │   │
-│  ├─────────────────────────────────────────────────────────────────┤   │
-│  │ {                                                                │   │
-│  │   "app_name": "MyBlog",                                         │   │
-│  │   "type": "web",                                                │   │
-│  │   "features": ["auth", "posts", "comments"]                     │   │
-│  │ }                                                                │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
-│  [▶ Execute Agent]                                                      │
-│                                                                         │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │ OUTPUT                                              ✓ Success    │   │
-│  ├─────────────────────────────────────────────────────────────────┤   │
-│  │ {                                                                │   │
-│  │   "project_structure": { ... },                                 │   │
-│  │   "modules": ["auth", "blog", "api"],                           │   │
-│  │   "execution_time": 0.023                                       │   │
-│  │ }                                                                │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-### Dashboard
+### What Makes Sankalpa Unique
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│  SANKALPA DASHBOARD                                            [─][□][×]│
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐   │
-│  │  35+        │  │  156        │  │  12         │  │  99.9%      │   │
-│  │  Agents     │  │  Executions │  │  Chains     │  │  Uptime     │   │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘   │
-│                                                                         │
-│  RECENT EXECUTIONS                          AGENT USAGE                 │
-│  ┌────────────────────────────────┐        ┌────────────────────────┐  │
-│  │ ● project_architect  0.02s ✓  │        │ ████████████ frontend  │  │
-│  │ ● frontend_builder   0.15s ✓  │        │ ██████████   backend   │  │
-│  │ ● backend_builder    0.12s ✓  │        │ ████████     architect │  │
-│  │ ● test_suite         0.08s ✓  │        │ ██████       deploy    │  │
-│  │ ● deploy_executor    1.23s ✓  │        │ ████         test      │  │
-│  └────────────────────────────────┘        └────────────────────────┘  │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-> **Note**: For actual screenshots, run Sankalpa locally and visit `http://localhost:9001`
-
----
-
-## Real-World Examples
-
-### Example 1: Build a Complete Blog Platform
-
-```bash
-# Using the API
-curl -X POST http://localhost:9000/api/chains/execute \
-  -H "Content-Type: application/json" \
-  -d '{
-    "chain_name": "blog_builder",
-    "agents": ["project_architect", "db_schema", "backend_builder", "frontend_builder", "auth_builder", "deploy_executor"],
-    "input_data": {
-      "app_name": "TechBlog",
-      "features": ["authentication", "markdown_editor", "comments", "dark_mode", "SEO"],
-      "database": "postgresql",
-      "deploy_target": "vercel"
-    }
-  }'
-```
-
-**Output**: Complete blog with:
-- User authentication (JWT)
-- Markdown post editor
-- Comment system
-- Dark/light mode toggle
-- SEO-optimized pages
-- Deployed to Vercel
-
-### Example 2: Generate a REST API
-
-```bash
-curl -X POST http://localhost:9000/api/chains/execute \
-  -H "Content-Type: application/json" \
-  -d '{
-    "chain_name": "api_generator",
-    "agents": ["db_schema", "backend_builder", "api_builder", "test_suite"],
-    "input_data": {
-      "resource": "products",
-      "fields": ["id", "name", "description", "price", "category", "stock"],
-      "operations": ["CRUD", "search", "filter", "paginate"]
-    }
-  }'
-```
-
-**Output**:
-- Database models and migrations
-- RESTful API endpoints
-- Input validation
-- Unit tests
-- OpenAPI documentation
-
-### Example 3: Create a SaaS Dashboard
-
-```bash
-curl -X POST http://localhost:9000/api/chains/execute \
-  -H "Content-Type: application/json" \
-  -d '{
-    "chain_name": "saas_builder",
-    "agents": ["project_architect", "auth_builder", "frontend_builder", "stripe_payment", "email_system"],
-    "input_data": {
-      "app_name": "AnalyticsDash",
-      "features": ["user_auth", "subscription_tiers", "usage_analytics", "email_notifications"],
-      "payment_provider": "stripe",
-      "email_provider": "sendgrid"
-    }
-  }'
-```
-
-**Output**:
-- Multi-tenant authentication
-- Stripe subscription integration
-- Usage tracking dashboard
-- Email notification system
-- Admin panel
-
-### Example 4: Build a Mobile-Ready PWA
-
-```bash
-curl -X POST http://localhost:9000/api/agents/execute \
-  -H "Content-Type: application/json" \
-  -d '{
-    "agent_name": "frontend_builder",
-    "input_data": {
-      "type": "pwa",
-      "features": ["offline_support", "push_notifications", "installable"],
-      "responsive": true,
-      "theme": "modern_minimal"
-    }
-  }'
-```
-
-### Example 5: Generate Marketing Materials
-
-```bash
-curl -X POST http://localhost:9000/api/chains/execute \
-  -H "Content-Type: application/json" \
-  -d '{
-    "chain_name": "marketing_suite",
-    "agents": ["readme_writer", "seo_optimizer", "product_hunt_copywriter", "pitch_deck_generator"],
-    "input_data": {
-      "product_name": "MyAwesomeApp",
-      "tagline": "The future of productivity",
-      "target_audience": "developers",
-      "key_features": ["AI-powered", "Real-time collaboration", "Cloud-native"]
-    }
-  }'
-```
-
-**Output**:
-- Professional README.md
-- SEO meta tags and keywords
-- Product Hunt launch copy
-- 10-slide pitch deck outline
-
----
-
-## LLM Integration Test Results
-
-### Task: Build "TaskFlow" - A Complete Project Management SaaS
-
-We tested Sankalpa with a complex real-world task to demonstrate its full capabilities with OpenAI integration:
-
-```
-Build a complete Project Management SaaS called 'TaskFlow' with:
-
-1. USER MANAGEMENT: JWT auth, profiles, teams, role-based access
-2. PROJECT FEATURES: CRUD, dashboard, Kanban board, filtering
-3. TASK MANAGEMENT: Assignments, priorities, due dates, comments
-4. COLLABORATION: Real-time updates, activity feed, file sharing
-5. BILLING: Stripe subscription (Free, Pro, Enterprise tiers)
-6. ANALYTICS: Completion rates, productivity metrics, burndown charts
-```
-
-### Results: Before vs After LLM Integration
-
-| Metric | Before (Templates) | After (OpenAI LLM) | Improvement |
-|--------|-------------------|-------------------|-------------|
-| **Files Generated** | 20 | **107** | **5.35x** |
-| **Total Time** | 22.7s | 384.35s | Real processing |
-| **Agent Execution** | ~2s each | 21-54s each | Actual LLM calls |
-| **Code Quality** | Scaffold stubs | Production-ready | Complete code |
-| **Input Usage** | Ignored | **"TaskFlow" used** | Context-aware |
-
-### Files Generated Per Agent
-
-| Agent | Files | Description |
-|-------|-------|-------------|
-| `project_architect` | 27 | Project structure, Docker, CI/CD, configs |
-| `db_schema` | 16 | SQLAlchemy models + Pydantic schemas |
-| `auth_builder` | 7 | JWT auth, password hashing, dependencies |
-| `backend_builder` | 10 | FastAPI routes, services, middleware |
-| `api_builder` | 4 | REST endpoints, pagination utilities |
-| `frontend_builder` | 15 | Next.js pages, components, hooks |
-| `ui_generator` | 13 | Button, Card, Modal, Table, Toast, etc. |
-| `stripe_payment` | 7 | Checkout, webhooks, pricing components |
-| `test_suite` | 1 | Pytest configuration and tests |
-| `readme_writer` | 1 | Professional documentation |
-| `seo_optimizer` | 6 | Meta tags, structured data, sitemap |
-| **TOTAL** | **107** | Complete full-stack application |
-
-### Sample Generated Code Quality
-
-**Database Model (User):**
-```python
-class User(BaseModel):
-    __tablename__ = 'users'
-    username = Column(String, unique=True, index=True, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    password_hash = Column(String, nullable=False)
-    team_id = Column(Integer, ForeignKey('teams.id'))
-
-    team = relationship('Team', back_populates='members')
-    projects = relationship('Project', back_populates='owner')
-```
-
-**Frontend Homepage (TaskFlow-branded):**
-```tsx
-<title>TaskFlow - Project Management SaaS</title>
-<h1>Welcome to TaskFlow</h1>
-<p>Your ultimate project management solution.</p>
-```
-
-**JWT Authentication:**
-```python
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
-    to_encode.update({'exp': expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-```
-
-### Key Achievements
-
-| Issue Fixed | Status |
-|-------------|--------|
-| Hard-coded templates replaced with LLM | ✅ Complete |
-| Input parameters now used correctly | ✅ "TaskFlow" appears in all files |
-| Context sharing between agents | ✅ Models/routes/pages accumulated |
-| README character-by-character bug | ✅ Fixed |
-| Invalid file formats (HTML in TSX) | ✅ Valid TSX generated |
-| Minimal 2-field models | ✅ Full relationships + indexes |
-
-### How to Run This Test
-
-```bash
-# Set your OpenAI API key in .env
-OPENAI_API_KEY=sk-your-key-here
-
-# Run the complex task test
-python test_complex_task.py
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         SANKALPA vs OTHER TOOLS                                  │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│  Feature              │ ChatGPT │ Copilot │ GPT Engineer │ Sankalpa             │
+│  ─────────────────────┼─────────┼─────────┼──────────────┼──────────────────    │
+│  Multi-Agent System   │   No    │   No    │    No        │  ✅ 35+ Agents       │
+│  Visual Workflows     │   No    │   No    │    No        │  ✅ Drag-n-Drop      │
+│  Persistent Memory    │ Limited │   No    │    No        │  ✅ Full Sessions    │
+│  Self-Replication     │   No    │   No    │    No        │  ✅ Agents → Agents  │
+│  Enterprise SSO       │   No    │   No    │    No        │  ✅ SAML/OIDC        │
+│  Fine-tuning UI       │   No    │   No    │    No        │  ✅ Visual Manager   │
+│  Marketplace          │   No    │   No    │    No        │  ✅ Share/Install    │
+│  Full Stack Deploy    │   No    │   No    │  Partial     │  ✅ Complete CI/CD   │
+│  Context Accumulation │   No    │   No    │    No        │  ✅ Chain Memory     │
+│                                                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -410,36 +298,51 @@ python test_complex_task.py
 
 ### Prerequisites
 
-- **Python 3.10+**
-- **Node.js 18+**
-- **PostgreSQL 14+** (optional, for production)
-- **Redis 7+** (optional, for caching)
+| Requirement | Minimum Version | Recommended | Purpose |
+|-------------|-----------------|-------------|---------|
+| **Python** | 3.10+ | 3.11+ | Backend runtime |
+| **Node.js** | 18+ | 20+ | Frontend runtime |
+| **npm** | 9+ | 10+ | Package management |
+| **PostgreSQL** | 14+ | 15+ | Production database (optional) |
+| **Redis** | 7+ | 7.2+ | Caching & pub/sub (optional) |
+| **Docker** | 24+ | 25+ | Container deployment (optional) |
+| **OpenAI API Key** | - | - | LLM-powered generation (optional) |
 
 ### Installation
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/sreejagatab/Sankalpa.git
 cd Sankalpa
 
-# Backend setup
+# 2. Backend setup
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Windows:
+venv\Scripts\activate
+
+# Linux/Mac:
+source venv/bin/activate
+
+# Install Python dependencies
 pip install -r requirements.txt
 
-# Frontend setup
+# 3. Frontend setup
 cd frontend
 npm install
 cd ..
 
-# Configure environment
+# 4. Configure environment
 cp .env.example .env
-# Edit .env with your settings
+
+# Edit .env with your settings:
+# - SANKALPA_JWT_SECRET (required)
+# - OPENAI_API_KEY (optional, for LLM features)
 ```
 
 ### Run Sankalpa
 
-**Option 1: Full System Launcher**
+**Option 1: Full System Launcher (Recommended)**
 ```bash
 python run_sankalpa.py
 ```
@@ -447,7 +350,7 @@ python run_sankalpa.py
 **Option 2: Run Services Separately**
 ```bash
 # Terminal 1: Backend API (port 9000)
-python -m uvicorn backend.simple_main:app --host 0.0.0.0 --port 9000
+python -m uvicorn backend.simple_main:app --host 0.0.0.0 --port 9000 --reload
 
 # Terminal 2: Frontend (port 9001)
 cd frontend && npm run dev
@@ -465,311 +368,1312 @@ docker-compose up -d
 | **Frontend** | http://localhost:9001 | Web UI |
 | **Workflow Composer** | http://localhost:9001/composer | Visual chain builder |
 | **Playground** | http://localhost:9001/playground | Agent testing |
+| **Dashboard** | http://localhost:9001/dashboard | System metrics |
 | **Marketplace** | http://localhost:9001/marketplace | Agent marketplace |
 | **Fine-tuning** | http://localhost:9001/finetuning | LLM fine-tuning UI |
 | **Backend API** | http://localhost:9000 | REST API |
-| **GraphQL API** | http://localhost:9000/graphql | GraphQL endpoint |
 | **API Docs** | http://localhost:9000/api/docs | Swagger UI |
+| **GraphQL** | http://localhost:9000/graphql | GraphQL Playground |
 | **WebSocket** | ws://localhost:9000/ws | Real-time updates |
 
 ### Verify Installation
 
 ```bash
-# Check API status
+# 1. Check API status
 curl http://localhost:9000/api/status
 # Expected: {"status": "Sankalpa API Server is running!", "version": "1.0.0"}
 
-# List available agents
+# 2. List available agents
 curl http://localhost:9000/api/agents
-# Expected: {"agents": [...]}
+# Expected: {"agents": [...35+ agents...]}
 
-# Execute a test agent
+# 3. Execute a test agent
 curl -X POST http://localhost:9000/api/agents/execute \
   -H "Content-Type: application/json" \
   -d '{"agent_name": "hello_world", "input_data": {"name": "Sankalpa"}}'
 # Expected: {"result": {"greeting": "Hello, Sankalpa!"}, ...}
+
+# 4. Check frontend
+# Open http://localhost:9001 in your browser
 ```
 
 ---
 
-## Architecture
+## System Architecture
 
-### System Overview
+### High-Level Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              SANKALPA PLATFORM                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                         PRESENTATION LAYER                           │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │   │
-│  │  │  Composer    │  │  Playground  │  │  Dashboard   │              │   │
-│  │  │  (ReactFlow) │  │  (Testing)   │  │  (Metrics)   │              │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘              │   │
-│  │                       Next.js 14 + TailwindCSS                       │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                    │                                        │
-│                                    ▼                                        │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                           API LAYER                                  │   │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐           │   │
-│  │  │ /agents  │  │ /chains  │  │ /memory  │  │ /users   │           │   │
-│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘           │   │
-│  │                     FastAPI + JWT + RBAC                            │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                    │                                        │
-│                                    ▼                                        │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                        CORE SERVICES                                 │   │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐           │   │
-│  │  │ Security │  │ Caching  │  │Monitoring│  │ Logging  │           │   │
-│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘           │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                    │                                        │
-│                                    ▼                                        │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                         AGENT LAYER (35+ Agents)                     │   │
-│  │  ┌────────────────────────────────────────────────────────────────┐ │   │
-│  │  │ Builder(11) │ Testing(4) │ Deploy(3) │ Marketing(4) │ Meta(2) │ │   │
-│  │  └────────────────────────────────────────────────────────────────┘ │   │
-│  │  ┌────────────────────────────────────────────────────────────────┐ │   │
-│  │  │ Enhanced(6): SelfReplicator, Finetuner, Copilot, VSCode, etc.  │ │   │
-│  │  └────────────────────────────────────────────────────────────────┘ │   │
-│  │                    Chain Manager + Memory System                     │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                    │                                        │
-│                                    ▼                                        │
-│  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                          DATA LAYER                                  │   │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │   │
-│  │  │  PostgreSQL  │  │    Redis     │  │ File System  │              │   │
-│  │  │  (Users,     │  │  (Caching,   │  │  (Sessions,  │              │   │
-│  │  │   Chains)    │  │   Sessions)  │  │   Agents)    │              │   │
-│  │  └──────────────┘  └──────────────┘  └──────────────┘              │   │
-│  └─────────────────────────────────────────────────────────────────────┘   │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  INTEGRATIONS: GitHub │ Marketplace │ Multi-Tenancy │ NLP │ Fine-Tuning    │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                                 SANKALPA PLATFORM                                    │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                           CLIENT LAYER                                         ║  │
+│  ║  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          ║  │
+│  ║  │  Web App    │  │  VS Code    │  │    CLI      │  │  Mobile     │          ║  │
+│  ║  │  (Next.js)  │  │  Extension  │  │   Client    │  │   PWA       │          ║  │
+│  ║  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘          ║  │
+│  ╚═════════│════════════════│════════════════│════════════════│══════════════════╝  │
+│            │                │                │                │                      │
+│            └────────────────┴────────────────┴────────────────┘                      │
+│                                      │                                               │
+│                                      ▼                                               │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                           API GATEWAY LAYER                                    ║  │
+│  ║  ┌─────────────────────────────────────────────────────────────────────────┐  ║  │
+│  ║  │                      FastAPI Application                                 │  ║  │
+│  ║  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │  ║  │
+│  ║  │  │   JWT    │ │   CORS   │ │   Rate   │ │ Security │ │  Metrics │      │  ║  │
+│  ║  │  │   Auth   │ │  Filter  │ │  Limiter │ │ Headers  │ │Middleware│      │  ║  │
+│  ║  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘      │  ║  │
+│  ║  │                                                                          │  ║  │
+│  ║  │  ┌────────────────────────────────────────────────────────────────────┐ │  ║  │
+│  ║  │  │ ENDPOINTS:                                                          │ │  ║  │
+│  ║  │  │ /api/agents  /api/chains  /api/memory  /api/users  /api/plugins    │ │  ║  │
+│  ║  │  │ /api/finetuning  /api/sso  /api/marketplace  /graphql  /ws        │ │  ║  │
+│  ║  │  └────────────────────────────────────────────────────────────────────┘ │  ║  │
+│  ║  └─────────────────────────────────────────────────────────────────────────┘  ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════╝  │
+│                                      │                                               │
+│                                      ▼                                               │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                         CORE SERVICES LAYER                                    ║  │
+│  ║  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐         ║  │
+│  ║  │   Config     │ │   Security   │ │   Caching    │ │  Monitoring  │         ║  │
+│  ║  │   Manager    │ │   Service    │ │   Service    │ │   Service    │         ║  │
+│  ║  │              │ │              │ │              │ │              │         ║  │
+│  ║  │ - YAML/ENV   │ │ - JWT/RBAC   │ │ - Redis      │ │ - Metrics    │         ║  │
+│  ║  │ - Hierarchy  │ │ - SSO        │ │ - In-Memory  │ │ - Health     │         ║  │
+│  ║  │ - Hot Reload │ │ - Rate Limit │ │ - TTL        │ │ - Logs       │         ║  │
+│  ║  └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘         ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════╝  │
+│                                      │                                               │
+│                                      ▼                                               │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                           AGENT LAYER (35+ Agents)                             ║  │
+│  ║  ┌─────────────────────────────────────────────────────────────────────────┐  ║  │
+│  ║  │                        AGENT CATEGORIES                                  │  ║  │
+│  ║  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐           │  ║  │
+│  ║  │  │ Builder │ │ Testing │ │ Deploy  │ │Marketing│ │Enhanced │           │  ║  │
+│  ║  │  │   (11)  │ │   (4)   │ │   (3)   │ │   (4)   │ │   (6)   │           │  ║  │
+│  ║  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘           │  ║  │
+│  ║  │  ┌─────────┐ ┌─────────┐ ┌─────────┐                                    │  ║  │
+│  ║  │  │  Meta   │ │  Orch   │ │ Custom  │                                    │  ║  │
+│  ║  │  │   (2)   │ │   (3)   │ │   (5+)  │                                    │  ║  │
+│  ║  │  └─────────┘ └─────────┘ └─────────┘                                    │  ║  │
+│  ║  └─────────────────────────────────────────────────────────────────────────┘  ║  │
+│  ║                                                                                ║  │
+│  ║  ┌─────────────────────────────────────────────────────────────────────────┐  ║  │
+│  ║  │                     ORCHESTRATION COMPONENTS                             │  ║  │
+│  ║  │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐       │  ║  │
+│  ║  │  │   Agent Loader   │  │   Chain Manager  │  │  Memory Manager  │       │  ║  │
+│  ║  │  │  (Dynamic Load)  │  │ (Seq/Par/Cond)   │  │   (Sessions)     │       │  ║  │
+│  ║  │  └──────────────────┘  └──────────────────┘  └──────────────────┘       │  ║  │
+│  ║  └─────────────────────────────────────────────────────────────────────────┘  ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════╝  │
+│                                      │                                               │
+│                                      ▼                                               │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                            DATA LAYER                                          ║  │
+│  ║  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐            ║  │
+│  ║  │    PostgreSQL    │  │      Redis       │  │   File System    │            ║  │
+│  ║  │                  │  │                  │  │                  │            ║  │
+│  ║  │  - Users         │  │  - Sessions      │  │  - Agent Files   │            ║  │
+│  ║  │  - Chains        │  │  - Cache         │  │  - Memory JSON   │            ║  │
+│  ║  │  - Executions    │  │  - Pub/Sub       │  │  - Plugins       │            ║  │
+│  ║  │  - Marketplace   │  │  - Rate Limits   │  │  - Workflows     │            ║  │
+│  ║  └──────────────────┘  └──────────────────┘  └──────────────────┘            ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════╝  │
+│                                      │                                               │
+│                                      ▼                                               │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                         EXTERNAL INTEGRATIONS                                  ║  │
+│  ║  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐    ║  │
+│  ║  │ OpenAI  │ │ GitHub  │ │ Stripe  │ │SendGrid │ │ Vercel  │ │ AWS/GCP │    ║  │
+│  ║  │   API   │ │   API   │ │   API   │ │   API   │ │   CLI   │ │  SDKs   │    ║  │
+│  ║  └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘    ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════╝  │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Component Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                            COMPONENT INTERACTION MAP                                 │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   FRONTEND (Next.js 14)                    BACKEND (FastAPI)                        │
+│   ══════════════════════                   ═════════════════                        │
+│                                                                                      │
+│   ┌─────────────────────┐                  ┌─────────────────────┐                  │
+│   │    Pages/Routes     │                  │    API Routers      │                  │
+│   │  ┌───────────────┐  │     REST API     │  ┌───────────────┐  │                  │
+│   │  │  /composer    │──┼──────────────────┼─▶│  /api/chains  │  │                  │
+│   │  │  /playground  │──┼──────────────────┼─▶│  /api/agents  │  │                  │
+│   │  │  /dashboard   │──┼──────────────────┼─▶│  /api/memory  │  │                  │
+│   │  │  /marketplace │──┼──────────────────┼─▶│/api/marketplace│ │                  │
+│   │  │  /finetuning  │──┼──────────────────┼─▶│/api/finetuning│  │                  │
+│   │  └───────────────┘  │                  │  └───────────────┘  │                  │
+│   └─────────────────────┘                  └──────────┬──────────┘                  │
+│                                                       │                              │
+│   ┌─────────────────────┐                            │                              │
+│   │    React Flow       │                            ▼                              │
+│   │  (Visual Composer)  │                  ┌─────────────────────┐                  │
+│   │  ┌───────────────┐  │                  │    Agent Layer      │                  │
+│   │  │ Agent Nodes   │  │                  │  ┌───────────────┐  │                  │
+│   │  │ Edge Connect  │  │     GraphQL      │  │ Agent Loader  │  │                  │
+│   │  │ Flow Control  │──┼──────────────────┼─▶│ Chain Manager │  │                  │
+│   │  └───────────────┘  │                  │  │ Base Agent    │  │                  │
+│   └─────────────────────┘                  │  └───────────────┘  │                  │
+│                                            └──────────┬──────────┘                  │
+│   ┌─────────────────────┐                            │                              │
+│   │   Apollo Client     │                            ▼                              │
+│   │   (GraphQL)         │                  ┌─────────────────────┐                  │
+│   │  ┌───────────────┐  │    WebSocket     │   Core Services     │                  │
+│   │  │ Queries       │  │                  │  ┌───────────────┐  │                  │
+│   │  │ Mutations     │──┼──────────────────┼─▶│ LLM Client    │  │                  │
+│   │  │ Subscriptions │  │                  │  │ Memory Mgr    │  │                  │
+│   │  └───────────────┘  │                  │  │ Security      │  │                  │
+│   └─────────────────────┘                  │  └───────────────┘  │                  │
+│                                            └──────────┬──────────┘                  │
+│   ┌─────────────────────┐                            │                              │
+│   │   State Management  │                            ▼                              │
+│   │  ┌───────────────┐  │                  ┌─────────────────────┐                  │
+│   │  │ React Context │  │                  │   External APIs     │                  │
+│   │  │ Local Storage │  │                  │  ┌───────────────┐  │                  │
+│   │  │ Session Cache │  │                  │  │ OpenAI API    │  │                  │
+│   │  └───────────────┘  │                  │  │ GitHub API    │  │                  │
+│   └─────────────────────┘                  │  │ Cloud SDKs    │  │                  │
+│                                            │  └───────────────┘  │                  │
+│                                            └─────────────────────┘                  │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Data Flow Diagrams
+
+### Request Lifecycle
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              REQUEST LIFECYCLE FLOW                                  │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   CLIENT REQUEST                                                                     │
+│        │                                                                             │
+│        ▼                                                                             │
+│   ┌─────────────────┐                                                               │
+│   │  1. CORS Check  │ ──▶ Verify origin against allowed_origins                     │
+│   └────────┬────────┘                                                               │
+│            │ ✓                                                                       │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 2. Rate Limiter │ ──▶ Check requests/minute per IP (default: 60/min)            │
+│   └────────┬────────┘                                                               │
+│            │ ✓                                                                       │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 3. Security     │ ──▶ Add security headers (X-Content-Type, CSP, etc.)          │
+│   │    Headers      │                                                               │
+│   └────────┬────────┘                                                               │
+│            │                                                                         │
+│            ▼                                                                         │
+│   ┌─────────────────┐     ┌─────────────────┐                                       │
+│   │ 4. JWT Auth     │────▶│  Decode Token   │                                       │
+│   │    (if needed)  │     │  Verify Expiry  │                                       │
+│   └────────┬────────┘     │  Extract User   │                                       │
+│            │              └─────────────────┘                                       │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 5. Request      │ ──▶ Log method, URL, client IP, request_id                    │
+│   │    Logging      │                                                               │
+│   └────────┬────────┘                                                               │
+│            │                                                                         │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 6. Router       │ ──▶ Match route → Execute handler                             │
+│   │    Dispatch     │                                                               │
+│   └────────┬────────┘                                                               │
+│            │                                                                         │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 7. Business     │ ──▶ Agent execution / Chain execution / Memory ops            │
+│   │    Logic        │                                                               │
+│   └────────┬────────┘                                                               │
+│            │                                                                         │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 8. Response     │ ──▶ Add X-Process-Time, X-Request-ID headers                  │
+│   │    Processing   │                                                               │
+│   └────────┬────────┘                                                               │
+│            │                                                                         │
+│            ▼                                                                         │
+│   ┌─────────────────┐                                                               │
+│   │ 9. Metrics      │ ──▶ Record request count, response time, status               │
+│   │    Collection   │                                                               │
+│   └────────┬────────┘                                                               │
+│            │                                                                         │
+│            ▼                                                                         │
+│       JSON RESPONSE                                                                  │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Agent Execution Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           AGENT EXECUTION PIPELINE                                   │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   POST /api/agents/execute                                                          │
+│   {                                                                                  │
+│     "agent_name": "frontend_builder",                                               │
+│     "input_data": {"app_name": "TaskFlow", "features": [...]}                       │
+│   }                                                                                  │
+│        │                                                                             │
+│        ▼                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │ 1. AGENT LOADER                                                              │   │
+│   │    ┌───────────────────────────────────────────────────────────────────┐    │   │
+│   │    │  agent_name = "frontend_builder"                                   │    │   │
+│   │    │                      │                                             │    │   │
+│   │    │                      ▼                                             │    │   │
+│   │    │  ┌─────────────────────────────────────────────────────────────┐  │    │   │
+│   │    │  │ catalog/agent_catalog.json                                   │  │    │   │
+│   │    │  │ {                                                            │  │    │   │
+│   │    │  │   "frontend_builder": {                                      │  │    │   │
+│   │    │  │     "module": "agents.builder.frontend_builder_agent",       │  │    │   │
+│   │    │  │     "class": "FrontendBuilderAgent"                          │  │    │   │
+│   │    │  │   }                                                          │  │    │   │
+│   │    │  │ }                                                            │  │    │   │
+│   │    │  └─────────────────────────────────────────────────────────────┘  │    │   │
+│   │    │                      │                                             │    │   │
+│   │    │                      ▼                                             │    │   │
+│   │    │  importlib.import_module() → Get class → Instantiate              │    │   │
+│   │    └───────────────────────────────────────────────────────────────────┘    │   │
+│   └──────────────────────────────────────────────────────────────────────┬──────┘   │
+│                                                                          │          │
+│                                                                          ▼          │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │ 2. AGENT INITIALIZATION                                                     │   │
+│   │    ┌───────────────────────────────────────────────────────────────────┐    │   │
+│   │    │  agent = FrontendBuilderAgent(name="frontend_builder")             │    │   │
+│   │    │                                                                    │    │   │
+│   │    │  Inherits from BaseAgent:                                          │    │   │
+│   │    │  - self.name = "frontend_builder"                                  │    │   │
+│   │    │  - self.category = "builder"                                       │    │   │
+│   │    │  - self.context = None                                             │    │   │
+│   │    │  - self._llm_client = None (lazy loaded)                           │    │   │
+│   │    └───────────────────────────────────────────────────────────────────┘    │   │
+│   └──────────────────────────────────────────────────────────────────────┬──────┘   │
+│                                                                          │          │
+│                                                                          ▼          │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │ 3. CONTEXT INJECTION (if part of chain)                                     │   │
+│   │    ┌───────────────────────────────────────────────────────────────────┐    │   │
+│   │    │  if accumulated_context:                                           │    │   │
+│   │    │      agent.set_context(accumulated_context)                        │    │   │
+│   │    │                                                                    │    │   │
+│   │    │  Context includes:                                                 │    │   │
+│   │    │  - Previous agent outputs                                          │    │   │
+│   │    │  - Generated files (models, routes)                                │    │   │
+│   │    │  - Shared state (endpoints, pages)                                 │    │   │
+│   │    └───────────────────────────────────────────────────────────────────┘    │   │
+│   └──────────────────────────────────────────────────────────────────────┬──────┘   │
+│                                                                          │          │
+│                                                                          ▼          │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │ 4. AGENT EXECUTION                                                          │   │
+│   │    ┌───────────────────────────────────────────────────────────────────┐    │   │
+│   │    │  result = agent.run(input_data)                                    │    │   │
+│   │    │                                                                    │    │   │
+│   │    │  Inside run():                                                     │    │   │
+│   │    │  ┌─────────────────────────────────────────────────────────────┐  │    │   │
+│   │    │  │ 1. Build prompt with app_name and features                  │  │    │   │
+│   │    │  │ 2. Add context from previous agents (if any)                │  │    │   │
+│   │    │  │ 3. Call self.generate_files_with_llm(prompt, file_types)    │  │    │   │
+│   │    │  │ 4. LLM generates code for each file                         │  │    │   │
+│   │    │  │ 5. Return {"message": "...", "files": {...}}                │  │    │   │
+│   │    │  └─────────────────────────────────────────────────────────────┘  │    │   │
+│   │    └───────────────────────────────────────────────────────────────────┘    │   │
+│   └──────────────────────────────────────────────────────────────────────┬──────┘   │
+│                                                                          │          │
+│                                                                          ▼          │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │ 5. LLM INTEGRATION (if enabled)                                             │   │
+│   │    ┌───────────────────────────────────────────────────────────────────┐    │   │
+│   │    │  core/llm_client.py:                                               │    │   │
+│   │    │                                                                    │    │   │
+│   │    │  ┌─────────────────────────────────────────────────────────────┐  │    │   │
+│   │    │  │  OpenAI API Call:                                            │  │    │   │
+│   │    │  │  - Model: gpt-4o-mini                                        │  │    │   │
+│   │    │  │  - System Prompt: Agent's SYSTEM_PROMPT                      │  │    │   │
+│   │    │  │  - User Prompt: Built from input_data + context              │  │    │   │
+│   │    │  │  - Temperature: 0.7                                          │  │    │   │
+│   │    │  │  - Max Tokens: 4096                                          │  │    │   │
+│   │    │  └─────────────────────────────────────────────────────────────┘  │    │   │
+│   │    │                                                                    │    │   │
+│   │    │  Returns: Generated code as string                                 │    │   │
+│   │    └───────────────────────────────────────────────────────────────────┘    │   │
+│   └──────────────────────────────────────────────────────────────────────┬──────┘   │
+│                                                                          │          │
+│                                                                          ▼          │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │ 6. RESULT PACKAGING                                                         │   │
+│   │    ┌───────────────────────────────────────────────────────────────────┐    │   │
+│   │    │  {                                                                 │    │   │
+│   │    │    "agent_name": "frontend_builder",                               │    │   │
+│   │    │    "execution_id": "exec_abc123",                                  │    │   │
+│   │    │    "result": {                                                     │    │   │
+│   │    │      "message": "Frontend generated for TaskFlow",                 │    │   │
+│   │    │      "files": {                                                    │    │   │
+│   │    │        "pages/index.tsx": "...",                                   │    │   │
+│   │    │        "components/Layout.tsx": "..."                              │    │   │
+│   │    │      }                                                             │    │   │
+│   │    │    },                                                              │    │   │
+│   │    │    "execution_time": 23.45,                                        │    │   │
+│   │    │    "success": true                                                 │    │   │
+│   │    │  }                                                                 │    │   │
+│   │    └───────────────────────────────────────────────────────────────────┘    │   │
+│   └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Chain Execution Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                            CHAIN EXECUTION FLOW                                      │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   POST /api/chains/execute                                                          │
+│   {                                                                                  │
+│     "chain_name": "full_stack_builder",                                             │
+│     "agents": ["project_architect", "db_schema", "backend_builder",                 │
+│                "frontend_builder", "test_suite"],                                   │
+│     "input_data": {"app_name": "TaskFlow"}                                          │
+│   }                                                                                  │
+│                                                                                      │
+│        │                                                                             │
+│        ▼                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │                         CHAIN MANAGER                                        │   │
+│   │                                                                              │   │
+│   │   accumulated_context = {                                                    │   │
+│   │     "agent_outputs": {},                                                     │   │
+│   │     "files": {},                                                             │   │
+│   │     "models": [],                                                            │   │
+│   │     "routes": [],                                                            │   │
+│   │     "pages": [],                                                             │   │
+│   │     "endpoints": []                                                          │   │
+│   │   }                                                                          │   │
+│   └──────────────────────────────────────────────────────────────────────┬──────┘   │
+│                                                                          │          │
+│   ┌──────────────────────────────────────────────────────────────────────┴──────┐   │
+│   │                                                                              │   │
+│   │  ┌─────────────┐      ┌─────────────┐      ┌─────────────┐                  │   │
+│   │  │  Agent 1    │      │  Agent 2    │      │  Agent 3    │                  │   │
+│   │  │  project_   │ ───▶ │  db_schema  │ ───▶ │  backend_   │ ───▶ ...        │   │
+│   │  │  architect  │      │             │      │  builder    │                  │   │
+│   │  └──────┬──────┘      └──────┬──────┘      └──────┬──────┘                  │   │
+│   │         │                    │                    │                          │   │
+│   │         ▼                    ▼                    ▼                          │   │
+│   │  ┌─────────────┐      ┌─────────────┐      ┌─────────────┐                  │   │
+│   │  │ Output:     │      │ Output:     │      │ Output:     │                  │   │
+│   │  │ - structure │      │ - models    │      │ - routes    │                  │   │
+│   │  │ - configs   │      │ - schemas   │      │ - endpoints │                  │   │
+│   │  │ - Dockerfile│      │ - User      │      │ - services  │                  │   │
+│   │  │             │      │ - Project   │      │             │                  │   │
+│   │  └──────┬──────┘      └──────┬──────┘      └──────┬──────┘                  │   │
+│   │         │                    │                    │                          │   │
+│   │         └────────────────────┴────────────────────┘                          │   │
+│   │                              │                                                │   │
+│   │                              ▼                                                │   │
+│   │   ┌─────────────────────────────────────────────────────────────────────┐    │   │
+│   │   │                    CONTEXT ACCUMULATION                              │    │   │
+│   │   │                                                                      │    │   │
+│   │   │  After each agent:                                                   │    │   │
+│   │   │                                                                      │    │   │
+│   │   │  accumulated_context["agent_outputs"][agent_name] = result           │    │   │
+│   │   │                                                                      │    │   │
+│   │   │  if "files" in result:                                               │    │   │
+│   │   │      accumulated_context["files"].update(result["files"])            │    │   │
+│   │   │                                                                      │    │   │
+│   │   │  if "models" in result:                                              │    │   │
+│   │   │      accumulated_context["models"].extend(result["models"])          │    │   │
+│   │   │                                                                      │    │   │
+│   │   │  ... routes, pages, endpoints                                        │    │   │
+│   │   │                                                                      │    │   │
+│   │   │  Next agent receives: agent.set_context(accumulated_context)         │    │   │
+│   │   └─────────────────────────────────────────────────────────────────────┘    │   │
+│   │                                                                              │   │
+│   └──────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+│   FINAL OUTPUT:                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │  {                                                                           │   │
+│   │    "chain_name": "full_stack_builder",                                       │   │
+│   │    "status": "completed",                                                    │   │
+│   │    "total_execution_time": 384.35,                                           │   │
+│   │    "agents_executed": 5,                                                     │   │
+│   │    "results": [                                                              │   │
+│   │      {"agent": "project_architect", "files": 27, "time": 45.2},              │   │
+│   │      {"agent": "db_schema", "files": 16, "time": 32.1},                      │   │
+│   │      {"agent": "backend_builder", "files": 10, "time": 28.5},                │   │
+│   │      {"agent": "frontend_builder", "files": 15, "time": 35.8},               │   │
+│   │      {"agent": "test_suite", "files": 1, "time": 12.3}                       │   │
+│   │    ],                                                                        │   │
+│   │    "total_files_generated": 69,                                              │   │
+│   │    "final_context": { ... }                                                  │   │
+│   │  }                                                                           │   │
+│   └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Memory System Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                            MEMORY SYSTEM FLOW                                        │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │                         SESSION MANAGEMENT                                   │   │
+│   │                                                                              │   │
+│   │   Request: { "session_id": "sess_abc123", "key": "user_prefs" }              │   │
+│   │                                                                              │   │
+│   │                              │                                               │   │
+│   │                              ▼                                               │   │
+│   │   ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│   │   │              MEMORY MANAGER (memory/memory_manager.py)               │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   Session Directory: memory/sessions/                                │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   ┌─────────────────────────────────────────────────────────────┐   │   │   │
+│   │   │   │  memory/sessions/                                            │   │   │   │
+│   │   │   │  ├── sess_abc123/                                            │   │   │   │
+│   │   │   │  │   ├── user_prefs.json                                     │   │   │   │
+│   │   │   │  │   ├── agent_outputs.json                                  │   │   │   │
+│   │   │   │  │   └── workflow_state.json                                 │   │   │   │
+│   │   │   │  ├── sess_def456/                                            │   │   │   │
+│   │   │   │  │   └── ...                                                 │   │   │   │
+│   │   │   │  └── default/                                                │   │   │   │
+│   │   │   │      └── ...                                                 │   │   │   │
+│   │   │   └─────────────────────────────────────────────────────────────┘   │   │   │
+│   │   └─────────────────────────────────────────────────────────────────────┘   │   │
+│   │                                                                              │   │
+│   │   ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│   │   │                      OPERATIONS                                      │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   SAVE:                                                              │   │   │
+│   │   │   ┌─────────────────────────────────────────────────────────────┐   │   │   │
+│   │   │   │  1. Validate session_id (create if not exists)              │   │   │   │
+│   │   │   │  2. Write to temp file first (atomic)                       │   │   │   │
+│   │   │   │  3. Rename temp to final (atomic)                           │   │   │   │
+│   │   │   │  4. Return success                                          │   │   │   │
+│   │   │   └─────────────────────────────────────────────────────────────┘   │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   LOAD:                                                              │   │   │
+│   │   │   ┌─────────────────────────────────────────────────────────────┐   │   │   │
+│   │   │   │  1. Build path: sessions/{session_id}/{key}.json            │   │   │   │
+│   │   │   │  2. Read file if exists                                     │   │   │   │
+│   │   │   │  3. Parse JSON                                              │   │   │   │
+│   │   │   │  4. Return data (or null if not found)                      │   │   │   │
+│   │   │   └─────────────────────────────────────────────────────────────┘   │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   TRANSACTION:                                                       │   │   │
+│   │   │   ┌─────────────────────────────────────────────────────────────┐   │   │   │
+│   │   │   │  1. Begin transaction (copy current state)                  │   │   │   │
+│   │   │   │  2. Perform operations                                      │   │   │   │
+│   │   │   │  3. Commit (keep changes) or Rollback (restore state)       │   │   │   │
+│   │   │   └─────────────────────────────────────────────────────────────┘   │   │   │
+│   │   └─────────────────────────────────────────────────────────────────────┘   │   │
+│   │                                                                              │   │
+│   │   ┌─────────────────────────────────────────────────────────────────────┐   │   │
+│   │   │                     VECTOR MEMORY (v2.0)                             │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   Providers:                                                         │   │   │
+│   │   │   ┌───────────┐  ┌───────────┐  ┌───────────┐                       │   │   │
+│   │   │   │ ChromaDB  │  │ Pinecone  │  │ Weaviate  │                       │   │   │
+│   │   │   │ (Local)   │  │ (Cloud)   │  │ (Self-   │                       │   │   │
+│   │   │   │           │  │           │  │  hosted)  │                       │   │   │
+│   │   │   └───────────┘  └───────────┘  └───────────┘                       │   │   │
+│   │   │                                                                      │   │   │
+│   │   │   Flow:                                                              │   │   │
+│   │   │   Text → OpenAI Embeddings → Vector → Store → Semantic Search       │   │   │
+│   │   └─────────────────────────────────────────────────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Directory Structure
 
 ```
 sankalpa/
-├── agents/                     # 35+ AI Agents
-│   ├── base.py                # BaseAgent abstract class
-│   ├── enhanced_base.py       # Enhanced agent with logging
-│   ├── loader.py              # Dynamic agent loading
-│   ├── chain_manager.py       # Agent chain orchestration
-│   ├── builder/               # 11 builder agents
-│   ├── testing/               # 4 testing agents
-│   ├── deployment/            # 3 deployment agents
-│   ├── marketing/             # 4 marketing agents
-│   ├── enhanced/              # 6 enhanced agents
-│   ├── meta/                  # 2 meta agents
-│   ├── orchestration/         # 3 orchestration agents
-│   └── custom/                # User-created agents
-├── backend/                    # FastAPI Backend
-│   ├── simple_main.py         # API server
-│   ├── enhanced_main.py       # Enhanced server with all features
-│   ├── routers/               # API endpoints
-│   │   ├── agents.py          # Agent management
-│   │   ├── chains.py          # Chain execution
-│   │   ├── memory.py          # Memory operations
-│   │   ├── users.py           # User management
-│   │   ├── finetuning.py      # LLM fine-tuning
-│   │   ├── sso.py             # Enterprise SSO
-│   │   └── plugins.py         # Plugin management
-│   ├── graphql/               # GraphQL API
-│   │   ├── schema.py          # Main schema
-│   │   ├── types/             # GraphQL types
-│   │   ├── resolvers/         # Query resolvers
-│   │   └── subscriptions.py   # Real-time subscriptions
-│   ├── db/                    # Database layer
-│   └── websockets/            # Real-time communication
-│       ├── connection_manager.py
-│       ├── redis_pubsub.py    # Redis pub/sub
-│       └── handlers.py        # Message handlers
-├── core/                       # Core Services
-│   ├── config.py              # Configuration management
-│   ├── security.py            # JWT, RBAC, rate limiting
-│   ├── caching.py             # Redis/in-memory caching
-│   ├── monitoring.py          # Metrics and health checks
-│   ├── logging.py             # Structured logging
-│   └── sso/                   # Enterprise SSO
-│       ├── base.py            # Base SSO classes
-│       ├── oidc.py            # OpenID Connect
-│       ├── saml.py            # SAML 2.0
-│       └── providers/         # Azure AD, Okta, Google
-├── memory/                     # Memory Management
-│   ├── memory_manager.py      # Basic memory
-│   ├── enhanced_memory_manager.py
-│   └── vector/                # Vector memory
-│       ├── embeddings.py      # OpenAI embeddings
-│       ├── chromadb_store.py  # ChromaDB backend
-│       ├── pinecone_store.py  # Pinecone backend
-│       └── weaviate_store.py  # Weaviate backend
-├── plugins/                    # Plugin System
-│   ├── base.py                # Plugin base class
-│   ├── registry.py            # Plugin registry
-│   ├── hooks.py               # 50+ hook points
-│   └── examples/              # Example plugins
-├── finetuning/                 # LLM Fine-tuning
-│   ├── models.py              # Fine-tuning job models
-│   ├── service.py             # OpenAI integration
-│   └── schemas.py             # API schemas
-├── frontend/                   # Next.js Web Application
-│   ├── pages/                 # All pages
-│   │   ├── index.tsx          # Homepage
-│   │   ├── composer.tsx       # Visual workflow composer
-│   │   ├── playground.tsx     # Agent testing
-│   │   ├── dashboard/         # System dashboard
-│   │   ├── marketplace/       # Agent marketplace
-│   │   ├── finetuning/        # Fine-tuning UI
-│   │   ├── auth/              # SSO login pages
-│   │   └── offline.tsx        # PWA offline page
-│   ├── components/            # React components
-│   │   ├── mobile/            # PWA mobile components
-│   │   ├── marketplace/       # Marketplace components
-│   │   └── finetuning/        # Fine-tuning components
-│   ├── lib/
-│   │   ├── api-client.ts      # REST API client
-│   │   ├── graphql-client.ts  # Apollo GraphQL client
-│   │   └── pwa/               # PWA utilities
-│   ├── hooks/usePWA.ts        # PWA React hook
-│   └── public/
-│       ├── manifest.json      # PWA manifest
-│       └── sw.js              # Service worker
-├── marketplace/                # Agent Marketplace
-│   ├── routes.py              # Marketplace API
-│   ├── models.py              # Marketplace models
-│   ├── installation.py        # Install/uninstall
-│   └── publishing.py          # Publishing workflow
-├── vscode-extension/           # VS Code Extension
+├── agents/                          # 35+ AI Agents
+│   ├── base.py                      # BaseAgent abstract class with LLM support
+│   ├── enhanced_base.py             # Enhanced agent with logging/metrics
+│   ├── loader.py                    # Dynamic agent loading from catalog
+│   ├── chain_manager.py             # Agent chain orchestration
+│   ├── enhanced_chain_manager.py    # Chain manager with retry/callbacks
+│   │
+│   ├── builder/                     # 11 Builder Agents
+│   │   ├── project_architect_agent.py
+│   │   ├── frontend_builder_agent.py
+│   │   ├── backend_builder_agent.py
+│   │   ├── api_builder_agent.py
+│   │   ├── db_schema_agent.py
+│   │   ├── auth_builder_agent.py
+│   │   ├── ui_generator_agent.py
+│   │   ├── markdown_editor_agent.py
+│   │   ├── email_system_agent.py
+│   │   ├── stripe_payment_agent.py
+│   │   └── role_auth_agent.py
+│   │
+│   ├── testing/                     # 4 Testing Agents
+│   │   ├── test_suite_agent.py
+│   │   ├── integration_test_agent.py
+│   │   ├── security_scanner_agent.py
+│   │   └── critic_agent.py
+│   │
+│   ├── deployment/                  # 3 Deployment Agents
+│   │   ├── deploy_executor_agent.py
+│   │   ├── ci_generator_agent.py
+│   │   └── domain_linker_agent.py
+│   │
+│   ├── marketing/                   # 4 Marketing Agents
+│   │   ├── readme_writer_agent.py
+│   │   ├── seo_optimizer_agent.py
+│   │   ├── product_hunt_copywriter_agent.py
+│   │   └── pitch_deck_generator_agent.py
+│   │
+│   ├── enhanced/                    # 6 Enhanced Agents
+│   │   ├── copilot_agent.py
+│   │   ├── self_replicator_agent.py
+│   │   ├── finetuner_agent.py
+│   │   ├── plugin_loader_agent.py
+│   │   ├── vs_code_extension_agent.py
+│   │   └── cli_runner_agent.py
+│   │
+│   ├── meta/                        # 2 Meta Agents
+│   │   ├── multi_agent_memory_manager.py
+│   │   └── version_tracker_agent.py
+│   │
+│   ├── orchestration/               # 3 Orchestration Agents
+│   │   ├── planner_agent.py
+│   │   ├── execution_manager_agent.py
+│   │   └── session_replayer_agent.py
+│   │
+│   └── custom/                      # 5+ Custom Agents
+│       ├── hello_world_agent.py
+│       ├── custom_calculator_agent.py
+│       └── ...
+│
+├── backend/                         # FastAPI Backend
+│   ├── simple_main.py               # Basic API server
+│   ├── enhanced_main.py             # Full-featured server
+│   │
+│   ├── routers/                     # API Endpoints
+│   │   ├── agents.py                # /api/agents
+│   │   ├── chains.py                # /api/chains
+│   │   ├── memory.py                # /api/memory
+│   │   ├── users.py                 # /api/users
+│   │   ├── finetuning.py            # /api/finetuning
+│   │   ├── sso.py                   # /api/sso
+│   │   ├── plugins.py               # /api/plugins
+│   │   └── marketplace.py           # /api/marketplace
+│   │
+│   ├── graphql/                     # GraphQL API
+│   │   ├── schema.py
+│   │   ├── types/
+│   │   ├── resolvers/
+│   │   └── subscriptions.py
+│   │
+│   ├── db/                          # Database Layer
+│   │   ├── database.py
+│   │   └── models.py
+│   │
+│   ├── websockets/                  # Real-time Communication
+│   │   ├── connection_manager.py
+│   │   ├── redis_pubsub.py
+│   │   ├── handlers.py
+│   │   └── routes.py
+│   │
+│   └── middleware/                  # Middleware
+│       └── metrics.py
+│
+├── core/                            # Core Services
+│   ├── config.py                    # Configuration management
+│   ├── security.py                  # JWT, RBAC, rate limiting
+│   ├── caching.py                   # Redis/in-memory caching
+│   ├── monitoring.py                # Metrics and health checks
+│   ├── logging.py                   # Structured logging
+│   ├── llm_client.py                # OpenAI LLM integration
+│   │
+│   └── sso/                         # Enterprise SSO
+│       ├── base.py
+│       ├── oidc.py
+│       ├── saml.py
+│       └── providers/
+│           ├── azure_ad.py
+│           ├── okta.py
+│           └── google.py
+│
+├── memory/                          # Memory Management
+│   ├── memory_manager.py            # Session-based memory
+│   ├── enhanced_memory_manager.py   # Enhanced with transactions
+│   │
+│   ├── sessions/                    # Session storage (JSON files)
+│   │
+│   └── vector/                      # Vector Memory (v2.0)
+│       ├── embeddings.py            # OpenAI embeddings
+│       ├── chromadb_store.py
+│       ├── pinecone_store.py
+│       └── weaviate_store.py
+│
+├── plugins/                         # Plugin System
+│   ├── base.py                      # Plugin base class
+│   ├── registry.py                  # Plugin registry
+│   ├── hooks.py                     # 50+ hook points
+│   └── examples/                    # Example plugins
+│
+├── finetuning/                      # LLM Fine-tuning
+│   ├── models.py                    # Fine-tuning job models
+│   ├── service.py                   # OpenAI integration
+│   └── schemas.py                   # API schemas
+│
+├── frontend/                        # Next.js Web Application
+│   ├── pages/                       # App Pages
+│   │   ├── index.tsx                # Homepage
+│   │   ├── composer.tsx             # Visual workflow composer
+│   │   ├── playground.tsx           # Agent testing
+│   │   ├── dashboard/               # System dashboard
+│   │   ├── marketplace/             # Agent marketplace
+│   │   ├── finetuning/              # Fine-tuning UI
+│   │   ├── auth/                    # SSO login pages
+│   │   └── offline.tsx              # PWA offline page
+│   │
+│   ├── components/                  # React Components
+│   │   ├── agents/
+│   │   ├── chat/
+│   │   ├── collaboration/
+│   │   ├── dashboard/
+│   │   ├── finetuning/
+│   │   ├── layout/
+│   │   ├── marketplace/
+│   │   ├── memory/
+│   │   ├── mobile/
+│   │   └── providers/
+│   │
+│   ├── hooks/                       # React Hooks
+│   │   └── usePWA.ts
+│   │
+│   ├── lib/                         # Utilities
+│   │   ├── api-client.ts
+│   │   ├── graphql-client.ts
+│   │   └── pwa/
+│   │
+│   ├── styles/                      # CSS/Tailwind
+│   │
+│   └── public/                      # Static Assets
+│       ├── manifest.json            # PWA manifest
+│       └── sw.js                    # Service worker
+│
+├── marketplace/                     # Agent Marketplace
+│   ├── routes.py                    # Marketplace API
+│   ├── models.py                    # Marketplace models
+│   ├── installation.py              # Install/uninstall
+│   └── publishing.py                # Publishing workflow
+│
+├── vscode-extension/                # VS Code Extension
 │   ├── src/
-│   │   ├── extension.ts       # Entry point
-│   │   ├── providers/         # Tree data providers
-│   │   ├── commands/          # VS Code commands
-│   │   ├── services/          # API client
-│   │   └── webviews/          # Custom panels
-│   └── package.json           # Extension manifest
-├── deploy/                     # Deployment
-│   └── helm/                  # Kubernetes Helm charts
+│   │   ├── extension.ts             # Entry point
+│   │   ├── providers/               # Tree data providers
+│   │   ├── commands/                # VS Code commands
+│   │   ├── services/                # API client
+│   │   └── webviews/                # Custom panels
+│   └── package.json
+│
+├── deploy/                          # Deployment
+│   └── helm/                        # Kubernetes Helm charts
 │       └── sankalpa/
 │           ├── Chart.yaml
-│           ├── values.yaml    # Default config
+│           ├── values.yaml
 │           ├── values-aws.yaml
 │           ├── values-gcp.yaml
 │           ├── values-azure.yaml
-│           └── templates/     # K8s manifests
-├── tenants/                    # Multi-tenancy
-├── integrations/               # External integrations
-├── cli/                        # Command-line interface
-├── tests/                      # Test suites
-├── docs/                       # Documentation
-├── docker-compose.yml          # Container orchestration
-├── requirements.txt            # Python dependencies
-└── run_sankalpa.py            # Full system launcher
+│           └── templates/
+│
+├── tenants/                         # Multi-tenancy
+├── integrations/                    # External integrations
+├── nlp/                             # NLP utilities
+├── cli/                             # Command-line interface
+├── catalog/                         # Agent catalog (JSON)
+│   └── agent_catalog.json
+│
+├── tests/                           # Test Suites
+│   ├── unit/
+│   ├── integration/
+│   ├── e2e/
+│   ├── security/
+│   └── performance/
+│
+├── docs/                            # Documentation
+│   ├── API.md
+│   ├── system_architecture.md
+│   ├── deployment-guide.md
+│   └── production-deployment.md
+│
+├── docker-compose.yml               # Container orchestration
+├── Dockerfile                       # Backend container
+├── requirements.txt                 # Python dependencies
+├── .env.example                     # Environment template
+└── run_sankalpa.py                  # Full system launcher
 ```
 
 ---
 
 ## Agent Ecosystem
 
-### Agent Categories
-
-Sankalpa includes **35+ specialized agents** organized into 9 categories:
-
-#### Builder Agents (11)
-
-| Agent | Description | Key Outputs |
-|-------|-------------|-------------|
-| `project_architect` | Creates project structure and module plan | Folder structure, architecture |
-| `frontend_builder` | Generates Next.js/React UI | Pages, components, styles |
-| `backend_builder` | Creates FastAPI backend scaffold | Routes, models, middleware |
-| `api_builder` | Generates REST API endpoints | OpenAPI spec, handlers |
-| `db_schema` | Designs database schemas | Pydantic models, migrations |
-| `auth_builder` | JWT authentication system | Login, signup, tokens |
-| `ui_generator` | UI layout with Tailwind | Forms, inputs, layouts |
-| `markdown_editor` | Markdown editor with preview | Editor component |
-| `email_system` | SMTP email integration | Email templates, sender |
-| `stripe_payment` | Payment system integration | Checkout, webhooks |
-| `role_auth` | Role-based access control | Permissions, middleware |
-
-#### Testing Agents (4)
-
-| Agent | Description |
-|-------|-------------|
-| `test_suite` | Unit test generation |
-| `integration_test` | Integration test creation |
-| `security_scanner` | Security vulnerability scanning |
-| `critic` | Code quality review |
-
-#### Deployment Agents (3)
-
-| Agent | Description |
-|-------|-------------|
-| `deploy_executor` | Deploy to Vercel/AWS/GCP/Azure |
-| `ci_generator` | GitHub Actions CI/CD workflows |
-| `domain_linker` | Custom domain configuration |
-
-#### Marketing Agents (4)
-
-| Agent | Description |
-|-------|-------------|
-| `readme_writer` | README.md generation |
-| `seo_optimizer` | SEO meta tags and keywords |
-| `product_hunt_copywriter` | Launch copy for Product Hunt |
-| `pitch_deck_generator` | 10-slide pitch deck outline |
-
-#### Enhanced Agents (6)
-
-| Agent | Description |
-|-------|-------------|
-| `copilot` | Interactive AI assistant |
-| `self_replicator` | Creates new agents from prompts |
-| `finetuner` | LLM fine-tuning automation |
-| `plugin_loader` | Third-party plugin integration |
-| `vs_code_extension` | VS Code extension generation |
-| `cli_runner` | CLI command execution |
-
-#### Meta Agents (2)
-
-| Agent | Description |
-|-------|-------------|
-| `multi_agent_memory_manager` | Cross-agent memory coordination |
-| `version_tracker` | Version control and tracking |
-
-#### Orchestration Agents (3)
-
-| Agent | Description |
-|-------|-------------|
-| `planner_agent` | Task planning and workflow design |
-| `execution_manager` | Agent execution orchestration |
-| `session_replayer` | Session replay and debugging |
-
-### Agent Execution Flow
+### Agent Categories Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        AGENT EXECUTION PIPELINE                          │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐          │
-│  │  INPUT  │────▶│  AGENT  │────▶│  CHAIN  │────▶│ OUTPUT  │          │
-│  │  DATA   │     │  LOADER │     │ MANAGER │     │ RESULT  │          │
-│  └─────────┘     └─────────┘     └─────────┘     └─────────┘          │
-│       │              │               │               │                 │
-│       ▼              ▼               ▼               ▼                 │
-│  ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐          │
-│  │VALIDATE │     │ DYNAMIC │     │SEQUENTIAL│    │  STORE  │          │
-│  │  INPUT  │     │  IMPORT │     │ PARALLEL │    │ MEMORY  │          │
-│  │  SCHEMA │     │  CLASS  │     │CONDITIONAL│   │  LOGS   │          │
-│  └─────────┘     └─────────┘     └─────────┘     └─────────┘          │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           SANKALPA AGENT ECOSYSTEM                                   │
+│                                  35+ AGENTS                                          │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐    │
+│  │                         BUILDER AGENTS (11)                                  │    │
+│  │  Generate complete application code from specifications                      │    │
+│  │                                                                              │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │    │
+│  │  │  project_    │ │  frontend_   │ │  backend_    │ │  api_        │       │    │
+│  │  │  architect   │ │  builder     │ │  builder     │ │  builder     │       │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘       │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │    │
+│  │  │  db_schema   │ │  auth_       │ │  ui_         │ │  markdown_   │       │    │
+│  │  │              │ │  builder     │ │  generator   │ │  editor      │       │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘       │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                        │    │
+│  │  │  email_      │ │  stripe_     │ │  role_       │                        │    │
+│  │  │  system      │ │  payment     │ │  auth        │                        │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘                        │    │
+│  └─────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐    │
+│  │                         TESTING AGENTS (4)                                   │    │
+│  │  Create tests and perform code quality analysis                              │    │
+│  │                                                                              │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │    │
+│  │  │  test_suite  │ │ integration_ │ │  security_   │ │  critic      │       │    │
+│  │  │              │ │  test        │ │  scanner     │ │              │       │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘       │    │
+│  └─────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐    │
+│  │                       DEPLOYMENT AGENTS (3)                                  │    │
+│  │  Handle CI/CD and cloud deployment                                          │    │
+│  │                                                                              │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                        │    │
+│  │  │  deploy_     │ │  ci_         │ │  domain_     │                        │    │
+│  │  │  executor    │ │  generator   │ │  linker      │                        │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘                        │    │
+│  └─────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐    │
+│  │                        MARKETING AGENTS (4)                                  │    │
+│  │  Generate documentation and marketing materials                              │    │
+│  │                                                                              │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │    │
+│  │  │  readme_     │ │  seo_        │ │product_hunt_ │ │  pitch_deck_ │       │    │
+│  │  │  writer      │ │  optimizer   │ │  copywriter  │ │  generator   │       │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘       │    │
+│  └─────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                      │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐    │
+│  │                        ENHANCED AGENTS (6)                                   │    │
+│  │  Advanced capabilities including self-replication                            │    │
+│  │                                                                              │    │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │    │
+│  │  │  copilot     │ │  self_       │ │  finetuner   │ │  plugin_     │       │    │
+│  │  │              │ │  replicator  │ │              │ │  loader      │       │    │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘       │    │
+│  │  ┌──────────────┐ ┌──────────────┐                                         │    │
+│  │  │  vs_code_    │ │  cli_        │                                         │    │
+│  │  │  extension   │ │  runner      │                                         │    │
+│  │  └──────────────┘ └──────────────┘                                         │    │
+│  └─────────────────────────────────────────────────────────────────────────────┘    │
+│                                                                                      │
+│  ┌────────────────────────────────────┐  ┌────────────────────────────────────┐    │
+│  │         META AGENTS (2)            │  │     ORCHESTRATION AGENTS (3)       │    │
+│  │  Cross-agent coordination          │  │  Workflow planning and execution   │    │
+│  │                                    │  │                                    │    │
+│  │  ┌──────────────┐ ┌──────────────┐│  │  ┌──────────────┐ ┌──────────────┐│    │
+│  │  │multi_agent_  │ │  version_    ││  │  │  planner_    │ │  execution_  ││    │
+│  │  │memory_manager│ │  tracker     ││  │  │  agent       │ │  manager     ││    │
+│  │  └──────────────┘ └──────────────┘│  │  └──────────────┘ └──────────────┘│    │
+│  │                                    │  │  ┌──────────────┐                 │    │
+│  │                                    │  │  │  session_    │                 │    │
+│  │                                    │  │  │  replayer    │                 │    │
+│  │                                    │  │  └──────────────┘                 │    │
+│  └────────────────────────────────────┘  └────────────────────────────────────┘    │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Builder Agents (11)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `project_architect` | Creates project structure and architecture | `app_name`, `type`, `features` | Folder structure, Docker, CI/CD, configs |
+| `frontend_builder` | Generates Next.js/React UI | `app_name`, `pages`, `components` | Pages, components, styles, hooks |
+| `backend_builder` | Creates FastAPI backend scaffold | `app_name`, `endpoints`, `features` | Routes, models, services, middleware |
+| `api_builder` | Generates REST API endpoints | `resource`, `fields`, `operations` | OpenAPI spec, handlers, validators |
+| `db_schema` | Designs database schemas | `app_name`, `entities`, `relationships` | SQLAlchemy models, Pydantic schemas, migrations |
+| `auth_builder` | JWT authentication system | `auth_type`, `features` | Login, signup, password reset, JWT handling |
+| `ui_generator` | UI layout with Tailwind | `components`, `theme` | Buttons, forms, cards, modals, tables |
+| `markdown_editor` | Markdown editor with preview | `features` | Editor component, preview, syntax highlighting |
+| `email_system` | SMTP email integration | `provider`, `templates` | Email templates, sender service |
+| `stripe_payment` | Payment system integration | `products`, `plans` | Checkout, webhooks, subscription handling |
+| `role_auth` | Role-based access control | `roles`, `permissions` | RBAC middleware, permission decorators |
+
+<details>
+<summary><b>Builder Agent Details</b></summary>
+
+#### project_architect
+
+**Purpose**: Creates the foundational project structure and architecture plan.
+
+**System Prompt**:
+```
+You are an expert software architect. Create comprehensive project structures
+with proper organization, configuration files, and deployment setup.
+```
+
+**Input Schema**:
+```json
+{
+  "app_name": "TaskFlow",
+  "type": "web",
+  "features": ["auth", "dashboard", "api"],
+  "tech_stack": {
+    "frontend": "nextjs",
+    "backend": "fastapi",
+    "database": "postgresql"
+  }
+}
+```
+
+**Output**:
+```json
+{
+  "message": "Project architecture created for TaskFlow",
+  "files": {
+    "docker-compose.yml": "...",
+    "Dockerfile": "...",
+    ".github/workflows/ci.yml": "...",
+    "package.json": "...",
+    "requirements.txt": "..."
+  },
+  "structure": ["src/", "components/", "api/", "models/"]
+}
+```
+
+#### frontend_builder
+
+**Purpose**: Generates complete Next.js frontend with pages and components.
+
+**System Prompt**:
+```
+You are an expert frontend developer specializing in Next.js 14, React,
+TypeScript, and TailwindCSS. Generate production-ready frontend code.
+```
+
+**Output Files**:
+- `pages/index.tsx` - Homepage
+- `pages/_app.tsx` - App wrapper
+- `components/Layout.tsx` - Layout component
+- `components/Header.tsx` - Navigation header
+- `styles/globals.css` - Global styles
+
+</details>
+
+### Testing Agents (4)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `test_suite` | Unit test generation | `code`, `framework` | pytest/jest tests |
+| `integration_test` | Integration test creation | `endpoints`, `scenarios` | API tests, database tests |
+| `security_scanner` | Security vulnerability scanning | `code`, `type` | Vulnerability report |
+| `critic` | Code quality review | `code`, `standards` | Code review, suggestions |
+
+### Deployment Agents (3)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `deploy_executor` | Deploy to cloud platforms | `target`, `config` | Deployment scripts, logs |
+| `ci_generator` | GitHub Actions workflows | `tests`, `deploy_target` | CI/CD YAML files |
+| `domain_linker` | Custom domain configuration | `domain`, `provider` | DNS records, SSL config |
+
+### Marketing Agents (4)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `readme_writer` | README.md generation | `project`, `features` | Professional README |
+| `seo_optimizer` | SEO meta tags and keywords | `content`, `target_audience` | Meta tags, sitemap, structured data |
+| `product_hunt_copywriter` | Launch copy for Product Hunt | `product`, `tagline` | Launch copy, taglines |
+| `pitch_deck_generator` | Pitch deck outline | `product`, `market` | 10-slide deck outline |
+
+### Enhanced Agents (6)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `copilot` | Interactive AI assistant | `query`, `context` | Suggestions, code snippets |
+| `self_replicator` | Creates new agents from prompts | `agent_description` | New agent Python file |
+| `finetuner` | LLM fine-tuning automation | `dataset`, `model` | Fine-tuning job config |
+| `plugin_loader` | Third-party plugin integration | `plugin_name` | Loaded plugin instance |
+| `vs_code_extension` | VS Code extension generation | `features` | Extension source code |
+| `cli_runner` | CLI command execution | `commands` | Command output |
+
+<details>
+<summary><b>Self-Replicator Agent Details</b></summary>
+
+The `self_replicator` agent is a unique meta-agent that can create new agents from natural language descriptions.
+
+**Example Input**:
+```json
+{
+  "agent_description": "Create an agent that generates GraphQL schemas from database models",
+  "agent_name": "graphql_generator",
+  "category": "builder"
+}
+```
+
+**Output**:
+```python
+# agents/custom/graphql_generator_agent.py
+from agents.base import BaseAgent
+
+class GraphQLGeneratorAgent(BaseAgent):
+    SYSTEM_PROMPT = """You are an expert at generating GraphQL schemas..."""
+
+    def __init__(self, name="graphql_generator", memory=None):
+        super().__init__(name, memory)
+        self.category = "builder"
+        self.description = "Generates GraphQL schemas from database models"
+
+    def run(self, input_data):
+        # Implementation generated by self-replicator
+        ...
+```
+
+</details>
+
+### Meta Agents (2)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `multi_agent_memory_manager` | Cross-agent memory coordination | `agents`, `session_id` | Shared memory state |
+| `version_tracker` | Version control and tracking | `changes` | Version history |
+
+### Orchestration Agents (3)
+
+| Agent | Description | Key Inputs | Key Outputs |
+|-------|-------------|------------|-------------|
+| `planner_agent` | Task planning and workflow design | `task`, `constraints` | Step-by-step plan |
+| `execution_manager` | Agent execution orchestration | `plan`, `agents` | Execution results |
+| `session_replayer` | Session replay and debugging | `session_id` | Replay transcript |
+
+### Custom Agents
+
+Custom agents can be created in the `agents/custom/` directory:
+
+| Agent | Description |
+|-------|-------------|
+| `hello_world` | Simple test agent for verification |
+| `custom_calculator` | Example calculator agent |
+
+### Creating a Custom Agent
+
+1. **Create the agent file**:
+
+```python
+# agents/custom/my_agent.py
+from agents.base import BaseAgent
+from typing import Dict, Any
+
+class MyCustomAgent(BaseAgent):
+    """My custom agent description."""
+
+    SYSTEM_PROMPT = """You are an expert at [task description].
+    Generate high-quality output based on the provided input."""
+
+    def __init__(self, name="my_custom_agent", memory=None):
+        super().__init__(name, memory)
+        self.category = "custom"
+        self.description = "My custom agent for specific tasks"
+
+    def run(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute the agent's main logic."""
+        # Get app name from input
+        app_name = self.get_app_name(input_data)
+
+        # Build prompt
+        prompt = f"""Generate output for "{app_name}"
+
+Requirements:
+{input_data.get('requirements', 'No specific requirements')}
+"""
+
+        # Add context if available (from chain execution)
+        if self.context:
+            prompt += f"\n\nContext from previous agents:\n{self.context}"
+
+        # Generate using LLM
+        files = self.generate_files_with_llm(
+            prompt,
+            ["output.json", "config.yaml"]
+        )
+
+        return {
+            "message": f"Output generated for {app_name}",
+            "files": files
+        }
+```
+
+2. **Register in catalog**:
+
+```json
+// catalog/agent_catalog.json
+{
+  "my_custom_agent": {
+    "description": "My custom agent for specific tasks",
+    "category": "custom",
+    "module": "agents.custom.my_agent",
+    "class": "MyCustomAgent"
+  }
+}
+```
+
+3. **Test the agent**:
+
+```bash
+curl -X POST http://localhost:9000/api/agents/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_name": "my_custom_agent",
+    "input_data": {
+      "app_name": "TestApp",
+      "requirements": "Generate a test output"
+    }
+  }'
+```
+
+---
+
+## LLM Integration Test Results
+
+### Task: Build "TaskFlow" - A Complete Project Management SaaS
+
+We tested Sankalpa with a complex real-world task to demonstrate its full capabilities with OpenAI GPT-4o-mini integration:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           TEST CASE: TaskFlow SaaS                                   │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  Build a complete Project Management SaaS called 'TaskFlow' with:                   │
+│                                                                                      │
+│  1. USER MANAGEMENT                                                                  │
+│     - JWT authentication                                                            │
+│     - User profiles with avatars                                                    │
+│     - Team management                                                               │
+│     - Role-based access control (Admin, Manager, Member)                            │
+│                                                                                      │
+│  2. PROJECT FEATURES                                                                 │
+│     - Project CRUD operations                                                       │
+│     - Project dashboard with stats                                                  │
+│     - Kanban board view                                                             │
+│     - List view with filtering                                                      │
+│                                                                                      │
+│  3. TASK MANAGEMENT                                                                  │
+│     - Task assignments                                                              │
+│     - Priority levels (Low, Medium, High, Urgent)                                   │
+│     - Due dates and reminders                                                       │
+│     - Comments and attachments                                                      │
+│                                                                                      │
+│  4. COLLABORATION                                                                    │
+│     - Real-time updates                                                             │
+│     - Activity feed                                                                 │
+│     - File sharing                                                                  │
+│     - @mentions                                                                     │
+│                                                                                      │
+│  5. BILLING                                                                          │
+│     - Stripe subscription integration                                               │
+│     - Free tier (5 projects, 10 users)                                              │
+│     - Pro tier ($15/user/month)                                                     │
+│     - Enterprise tier (custom pricing)                                              │
+│                                                                                      │
+│  6. ANALYTICS                                                                        │
+│     - Task completion rates                                                         │
+│     - Productivity metrics                                                          │
+│     - Burndown charts                                                               │
+│     - Export reports                                                                │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Results: Before vs After LLM Integration
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           PERFORMANCE COMPARISON                                     │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ┌─────────────────────────────┐    ┌─────────────────────────────┐                │
+│  │    BEFORE (Templates)       │    │    AFTER (OpenAI LLM)       │                │
+│  │    ═══════════════════      │    │    ═════════════════════    │                │
+│  │                             │    │                             │                │
+│  │    Files Generated: 20      │    │    Files Generated: 107     │                │
+│  │    Total Time: 22.7s        │    │    Total Time: 384.35s      │                │
+│  │    Per Agent: ~2s           │    │    Per Agent: 21-54s        │                │
+│  │    Code Quality: Scaffold   │    │    Code Quality: Production │                │
+│  │    Input Usage: Ignored     │    │    Input Usage: Used        │                │
+│  │    Context: None            │    │    Context: Accumulated     │                │
+│  │                             │    │                             │                │
+│  └─────────────────────────────┘    └─────────────────────────────┘                │
+│                                                                                      │
+│  IMPROVEMENT: 5.35x more files generated with production-ready code                 │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+| Metric | Before (Templates) | After (OpenAI LLM) | Improvement |
+|--------|-------------------|-------------------|-------------|
+| **Files Generated** | 20 | **107** | **5.35x** |
+| **Total Time** | 22.7s | 384.35s | Real processing |
+| **Agent Execution** | ~2s each | 21-54s each | Actual LLM calls |
+| **Code Quality** | Scaffold stubs | Production-ready | Complete code |
+| **Input Usage** | Ignored | **"TaskFlow" used** | Context-aware |
+| **Context Sharing** | None | **Full accumulation** | Chain memory |
+
+### Files Generated Per Agent
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        FILES GENERATED BY AGENT                                      │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  Agent                │ Files │ Time    │ Description                               │
+│  ─────────────────────┼───────┼─────────┼──────────────────────────────────────────│
+│  project_architect    │  27   │ 54.2s   │ Project structure, Docker, CI/CD         │
+│  db_schema            │  16   │ 45.3s   │ SQLAlchemy models + Pydantic schemas     │
+│  auth_builder         │   7   │ 32.1s   │ JWT auth, password hashing               │
+│  backend_builder      │  10   │ 38.7s   │ FastAPI routes, services                 │
+│  api_builder          │   4   │ 21.4s   │ REST endpoints, pagination               │
+│  frontend_builder     │  15   │ 42.6s   │ Next.js pages, components, hooks         │
+│  ui_generator         │  13   │ 35.8s   │ Button, Card, Modal, Table, Toast        │
+│  stripe_payment       │   7   │ 28.9s   │ Checkout, webhooks, pricing UI           │
+│  test_suite           │   1   │ 18.2s   │ Pytest configuration                     │
+│  readme_writer        │   1   │ 22.5s   │ Professional documentation               │
+│  seo_optimizer        │   6   │ 24.6s   │ Meta tags, structured data, sitemap      │
+│  ─────────────────────┼───────┼─────────┼──────────────────────────────────────────│
+│  TOTAL                │ 107   │ 384.35s │ Complete full-stack application          │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Sample Generated Code Quality
+
+**Database Model (User) - SQLAlchemy with relationships:**
+```python
+class User(BaseModel):
+    __tablename__ = 'users'
+    username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    team_id = Column(Integer, ForeignKey('teams.id'))
+
+    team = relationship('Team', back_populates='members')
+    projects = relationship('Project', back_populates='owner')
+```
+
+**Frontend Homepage (TaskFlow-branded):**
+```tsx
+<Head>
+    <title>TaskFlow - Project Management SaaS</title>
+    <meta name="description" content="Manage your projects efficiently with TaskFlow." />
+</Head>
+<section className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <h1 className="text-4xl font-bold mb-4">Welcome to TaskFlow</h1>
+    <p className="text-lg mb-8">Your ultimate project management solution.</p>
+    <a href="/auth/login" className="bg-blue-500 text-white px-4 py-2 rounded">Get Started</a>
+</section>
+```
+
+**JWT Authentication - Production-ready:**
+```python
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({'exp': expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def verify_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail='Token has expired')
+    except jwt.JWTError:
+        raise HTTPException(status_code=401, detail='Invalid token')
+```
+
+### Key Achievements
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                           KEY ACHIEVEMENTS                                           │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  Issue                              │ Before          │ After                       │
+│  ───────────────────────────────────┼─────────────────┼────────────────────────────│
+│  Hard-coded templates               │ Yes             │ ✅ LLM-generated code      │
+│  Input parameters ignored           │ Yes             │ ✅ "TaskFlow" everywhere   │
+│  Context sharing between agents     │ None            │ ✅ Full accumulation       │
+│  README character-by-character bug  │ Broken          │ ✅ Fixed                   │
+│  Invalid file formats (HTML in TSX) │ Common          │ ✅ Valid TSX generated     │
+│  Minimal 2-field models             │ Yes             │ ✅ Full relationships      │
+│  No indexes on database columns     │ Yes             │ ✅ Indexed columns         │
+│  Generic "MyApp" naming             │ Yes             │ ✅ "TaskFlow" branding     │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### How to Run This Test
+
+```bash
+# 1. Set your OpenAI API key in .env
+echo "OPENAI_API_KEY=sk-your-key-here" >> .env
+
+# 2. Start the backend server
+python -m uvicorn backend.enhanced_main:app --host 0.0.0.0 --port 9000
+
+# 3. Run the complex task test
+python test_complex_task.py
+
+# 4. Check generated output
+ls -la generated_output/
 ```
 
 ---
@@ -784,101 +1688,84 @@ http://localhost:9000/api
 
 ### Authentication
 
+All authenticated endpoints require a JWT token in the Authorization header:
+
 ```bash
-# Get JWT token
-POST /api/users/login
-Content-Type: application/json
+# Login to get token
+curl -X POST http://localhost:9000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "user@example.com", "password": "password"}'
+
+# Response:
 {
-  "username": "user@example.com",
-  "password": "password"
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "bearer",
+  "expires_in": 1800
 }
 
-# Use token in requests
-Authorization: Bearer <token>
+# Use token in subsequent requests
+curl -H "Authorization: Bearer <token>" http://localhost:9000/api/me
 ```
 
-### Endpoints
+### Agents API
 
-#### Status
-
-```bash
-GET /api/status
-# Response: {"status": "Sankalpa API Server is running!", "version": "1.0.0"}
-```
-
-#### Agents
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/agents` | List all agents | No |
+| GET | `/api/agents/enhanced` | List enhanced agents | No |
+| POST | `/api/agents/execute` | Execute an agent | No |
+| GET | `/api/agents/{name}` | Get agent details | No |
 
 ```bash
 # List all agents
-GET /api/agents
-# Response: {"agents": [{name, description, category, model, inputs, outputs}, ...]}
-
-# List enhanced agents
-GET /api/agents/enhanced
-# Response: [{id, name, description, category, model}, ...]
+curl http://localhost:9000/api/agents
 
 # Execute an agent
-POST /api/agents/execute
-Content-Type: application/json
-{
-  "agent_name": "hello_world",
-  "input_data": {"name": "User"}
-}
-# Response: {"agent_name": "hello_world", "execution_id": "exec_123", "result": {...}, "execution_time": 0.001}
+curl -X POST http://localhost:9000/api/agents/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_name": "frontend_builder",
+    "input_data": {
+      "app_name": "MyApp",
+      "features": ["auth", "dashboard"]
+    }
+  }'
 ```
 
-#### Chains
+### Chains API
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/chains` | List chain templates | No |
+| POST | `/api/chains/execute` | Execute a chain | No |
+| GET | `/api/chains/{name}` | Get chain details | No |
 
 ```bash
-# List chain templates
-GET /api/chains
-# Response: {"chains": [{name, description, agents}, ...]}
-
 # Execute a chain
-POST /api/chains/execute
-Content-Type: application/json
-{
-  "chain_name": "builder_chain",
-  "agents": ["project_architect", "frontend_builder", "backend_builder"],
-  "input_data": {"app_name": "MyApp"},
-  "session_id": "optional_session_id"
-}
-# Response: {"chain_name": "...", "status": "completed", "results": [...], "final_output": {...}}
+curl -X POST http://localhost:9000/api/chains/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "chain_name": "full_stack_builder",
+    "agents": ["project_architect", "db_schema", "backend_builder", "frontend_builder"],
+    "input_data": {"app_name": "TaskFlow"},
+    "session_id": "sess_123"
+  }'
 ```
 
-#### Memory
+### Memory API
 
-```bash
-# Save to memory
-POST /api/memory/save
-Content-Type: application/json
-{
-  "key": "my_key",
-  "value": {"data": "value"},
-  "session_id": "optional_session"
-}
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/memory/save` | Save to memory | No |
+| POST | `/api/memory/load` | Load from memory | No |
+| DELETE | `/api/memory/{session_id}` | Clear session | No |
+| POST | `/api/memory/search/vector` | Vector search (v2.0) | Yes |
 
-# Load from memory
-POST /api/memory/load
-Content-Type: application/json
-{
-  "key": "my_key",
-  "session_id": "optional_session"
-}
-
-# Vector search (v2.0)
-POST /api/memory/search/vector
-Content-Type: application/json
-{
-  "query": "search text",
-  "limit": 10,
-  "provider": "chromadb"
-}
-```
-
-#### GraphQL (v2.0)
+### GraphQL API (v2.0)
 
 ```graphql
+# Endpoint: POST /graphql
+
 # Query agents
 query {
   agents {
@@ -902,49 +1789,63 @@ mutation {
 subscription {
   chainProgress(chainId: "chain_123") {
     step
+    agent
     status
     output
   }
 }
 ```
 
-#### SSO (v2.0)
+### WebSocket API
+
+```javascript
+// Connect to WebSocket
+const ws = new WebSocket('ws://localhost:9000/ws');
+
+// Subscribe to chain progress
+ws.send(JSON.stringify({
+  type: 'subscribe',
+  channel: 'chain_progress',
+  chain_id: 'chain_123'
+}));
+
+// Receive updates
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Progress:', data);
+};
+```
+
+### SSO API (v2.0)
 
 ```bash
 # Get SSO login URL
-GET /api/sso/login?provider=azure_ad&redirect_uri=http://localhost:9001/auth/callback
+curl "http://localhost:9000/api/sso/login?provider=azure_ad&redirect_uri=http://localhost:9001/auth/callback"
 
-# Handle SSO callback
-POST /api/sso/callback
-Content-Type: application/json
-{
-  "code": "auth_code",
-  "state": "state_value"
-}
-
-# SSO logout
-POST /api/sso/logout
-Authorization: Bearer <token>
+# Handle callback
+curl -X POST http://localhost:9000/api/sso/callback \
+  -H "Content-Type: application/json" \
+  -d '{"code": "auth_code", "state": "state_value"}'
 ```
 
-#### Fine-tuning (v2.0)
+### Fine-tuning API (v2.0)
 
 ```bash
-# List fine-tuning jobs
-GET /api/finetuning/jobs
-Authorization: Bearer <token>
+# List jobs
+curl -H "Authorization: Bearer <token>" http://localhost:9000/api/finetuning/jobs
 
-# Create fine-tuning job
-POST /api/finetuning/jobs
-Content-Type: application/json
-{
-  "model": "gpt-3.5-turbo",
-  "dataset_id": "dataset_123",
-  "hyperparameters": {"epochs": 3}
-}
+# Create job
+curl -X POST http://localhost:9000/api/finetuning/jobs \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-3.5-turbo",
+    "dataset_id": "dataset_123",
+    "hyperparameters": {"epochs": 3}
+  }'
 
 # Get job status
-GET /api/finetuning/jobs/{job_id}
+curl -H "Authorization: Bearer <token>" http://localhost:9000/api/finetuning/jobs/job_123
 ```
 
 For complete API documentation, see [docs/API.md](./docs/API.md).
@@ -953,9 +1854,27 @@ For complete API documentation, see [docs/API.md](./docs/API.md).
 
 ## Visual Workflow Composer
 
-The **Workflow Composer** is a drag-and-drop interface for building agent chains visually.
-
 ### Features
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  SANKALPA WORKFLOW COMPOSER                                              [─][□][×]  │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│ ┌─────────────┐                                                                      │
+│ │ AGENTS      │    ┌──────────┐      ┌──────────┐      ┌──────────┐               │
+│ ├─────────────┤    │ Project  │─────▶│ Frontend │─────▶│  Deploy  │               │
+│ │ ○ Architect │    │ Architect│      │ Builder  │      │ Executor │               │
+│ │ ○ Frontend  │    └──────────┘      └──────────┘      └──────────┘               │
+│ │ ○ Backend   │          │                                    │                    │
+│ │ ○ Database  │          │           ┌──────────┐             │                    │
+│ │ ○ Auth      │          └──────────▶│ Backend  │─────────────┘                    │
+│ │ ○ Deploy    │                      │ Builder  │                                  │
+│ │ ○ Test      │                      └──────────┘                                  │
+│ └─────────────┘                                                                      │
+│                                                                                      │
+│ [Run Chain]  [Save]  [Export]  [Import]                           Agents: 4        │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 - **Drag-and-drop nodes** - Add agents by dragging from the palette
 - **Visual connections** - Connect agents with edges to define flow
@@ -963,7 +1882,7 @@ The **Workflow Composer** is a drag-and-drop interface for building agent chains
 - **Template workflows** - Load pre-built workflow templates
 - **Export/Import** - Save and share workflow JSON files
 
-### Accessing the Composer
+### Access
 
 ```
 http://localhost:9001/composer
@@ -976,13 +1895,13 @@ http://localhost:9001/composer
   "name": "full_stack_builder",
   "description": "Build a complete full-stack application",
   "nodes": [
-    {"id": "1", "type": "agent", "data": {"agent": "project_architect"}},
-    {"id": "2", "type": "agent", "data": {"agent": "frontend_builder"}},
-    {"id": "3", "type": "agent", "data": {"agent": "backend_builder"}}
+    {"id": "1", "type": "agent", "position": {"x": 100, "y": 100}, "data": {"agent": "project_architect"}},
+    {"id": "2", "type": "agent", "position": {"x": 300, "y": 100}, "data": {"agent": "frontend_builder"}},
+    {"id": "3", "type": "agent", "position": {"x": 300, "y": 250}, "data": {"agent": "backend_builder"}}
   ],
   "edges": [
-    {"source": "1", "target": "2"},
-    {"source": "1", "target": "3"}
+    {"source": "1", "target": "2", "id": "e1-2"},
+    {"source": "1", "target": "3", "id": "e1-3"}
   ]
 }
 ```
@@ -993,22 +1912,36 @@ http://localhost:9001/composer
 
 ### Authentication & Authorization
 
-| Feature | Implementation |
-|---------|----------------|
-| **JWT Tokens** | HS256 algorithm, configurable expiry |
-| **Password Hashing** | bcrypt with salt |
-| **Role-Based Access** | Admin, User, Guest roles |
-| **Rate Limiting** | 100 requests/minute per IP |
-| **CORS Protection** | Configurable allowed origins |
-| **Enterprise SSO** | SAML 2.0 and OpenID Connect (v2.0) |
-| **PKCE Support** | Secure OAuth flows for SPAs (v2.0) |
+| Feature | Implementation | Details |
+|---------|----------------|---------|
+| **JWT Tokens** | HS256 algorithm | Configurable expiry (default: 30 min) |
+| **Password Hashing** | bcrypt with salt | 12 rounds by default |
+| **Role-Based Access** | Admin, User, Guest | Middleware-based enforcement |
+| **Rate Limiting** | Per-IP tracking | 60 requests/minute default |
+| **CORS Protection** | Configurable origins | Whitelist-based |
+| **Enterprise SSO** | SAML 2.0, OIDC | Azure AD, Okta, Google |
+| **PKCE Support** | OAuth2 + PKCE | Secure SPA flows |
+
+### Security Headers
+
+```python
+# Applied to all responses
+{
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "X-XSS-Protection": "1; mode=block",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Content-Security-Policy": "default-src 'self'",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+}
+```
 
 ### Security Best Practices
 
 1. **Environment Variables**: Never commit `.env` files
 2. **JWT Secret**: Use a strong, random secret (32+ characters)
 3. **HTTPS**: Always use HTTPS in production
-4. **Input Validation**: All inputs are validated before processing
+4. **Input Validation**: All inputs validated with Pydantic
 5. **SQL Injection**: Parameterized queries via SQLAlchemy
 6. **XSS Protection**: React's built-in escaping + CSP headers
 
@@ -1016,33 +1949,12 @@ http://localhost:9001/composer
 
 ```bash
 # .env security settings
-SANKALPA_JWT_SECRET=your-very-long-random-secret-key-here
+SANKALPA_JWT_SECRET=your-very-long-random-secret-key-at-least-32-chars
 SANKALPA_JWT_ALGORITHM=HS256
 SANKALPA_JWT_EXPIRE_MINUTES=30
 SANKALPA_ALLOWED_ORIGINS=https://yourdomain.com
-SANKALPA_RATE_LIMIT=100
+SANKALPA_RATE_LIMIT=60
 ```
-
-### Reporting Vulnerabilities
-
-Found a security issue? Please email security@sankalpa.dev (do not open public issues for security vulnerabilities).
-
----
-
-## Protocols & Integrations
-
-Sankalpa integrates multiple AI agent protocols:
-
-| Protocol | Purpose | Implementation |
-|----------|---------|----------------|
-| **LangChain** | Agent chaining, memory | ChainManager, MemoryManager |
-| **MCP** | Model Context Protocol | Agent orchestration |
-| **CrewAI** | Multi-agent collaboration | Role-based agents |
-| **AutoGen** | Task planning | PlannerAgent |
-| **ReAct** | Reasoning + tool use | Copilot, Critic agents |
-| **PromptFlow** | Visual workflows | Composer UI |
-| **GPT Engineer** | Project generation | Builder agents |
-| **BabyAGI** | Task planning | Planning system |
 
 ---
 
@@ -1050,38 +1962,77 @@ Sankalpa integrates multiple AI agent protocols:
 
 ### Environment Variables
 
-Create a `.env` file from `.env.example`:
-
 ```bash
-# Application
-SANKALPA_ENV=development
-SANKALPA_DEBUG=true
-SANKALPA_LOG_LEVEL=INFO
+# ═══════════════════════════════════════════════════════════════════
+# APPLICATION SETTINGS
+# ═══════════════════════════════════════════════════════════════════
+SANKALPA_ENV=development              # development | production
+SANKALPA_DEBUG=true                   # Enable debug mode
+SANKALPA_LOG_LEVEL=INFO               # DEBUG | INFO | WARNING | ERROR
 
-# API Server
-API_HOST=0.0.0.0
-API_PORT=9000
+# ═══════════════════════════════════════════════════════════════════
+# API SERVER
+# ═══════════════════════════════════════════════════════════════════
+API_HOST=0.0.0.0                      # Bind address
+API_PORT=9000                         # Backend port
+FRONTEND_URL=http://localhost:9001    # Frontend URL for CORS
 
-# Frontend
-FRONTEND_URL=http://localhost:9001
+# ═══════════════════════════════════════════════════════════════════
+# SECURITY
+# ═══════════════════════════════════════════════════════════════════
+SANKALPA_JWT_SECRET=your-secret-key   # REQUIRED: JWT signing key
+SANKALPA_JWT_ALGORITHM=HS256          # JWT algorithm
+SANKALPA_JWT_EXPIRE_MINUTES=30        # Token expiry
+SANKALPA_ALLOWED_ORIGINS=http://localhost:9001,http://localhost:3000
+SANKALPA_RATE_LIMIT=60                # Requests per minute
 
-# Security
-SANKALPA_JWT_SECRET=your-secret-key-here
-SANKALPA_JWT_ALGORITHM=HS256
-SANKALPA_JWT_EXPIRE_MINUTES=30
-
-# Database (optional for production)
+# ═══════════════════════════════════════════════════════════════════
+# DATABASE (Optional - for production)
+# ═══════════════════════════════════════════════════════════════════
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DB=sankalpa
 POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
 
-# Redis (optional for caching)
+# ═══════════════════════════════════════════════════════════════════
+# REDIS (Optional - for caching & pub/sub)
+# ═══════════════════════════════════════════════════════════════════
 REDIS_URL=redis://localhost:6379/0
 
-# External APIs (optional)
-OPENAI_API_KEY=your-openai-key
-GITHUB_TOKEN=your-github-token
+# ═══════════════════════════════════════════════════════════════════
+# LLM INTEGRATION
+# ═══════════════════════════════════════════════════════════════════
+OPENAI_API_KEY=sk-your-openai-key     # OpenAI API key
+OPENAI_MODEL=gpt-4o-mini              # Default model
+OPENAI_TEMPERATURE=0.7                # Generation temperature
+OPENAI_MAX_TOKENS=4096                # Max tokens per request
+
+# ═══════════════════════════════════════════════════════════════════
+# EXTERNAL INTEGRATIONS
+# ═══════════════════════════════════════════════════════════════════
+GITHUB_TOKEN=ghp_your-token           # GitHub API access
+STRIPE_SECRET_KEY=sk_test_xxx         # Stripe payments
+STRIPE_WEBHOOK_SECRET=whsec_xxx       # Stripe webhooks
+SENDGRID_API_KEY=SG.xxx               # Email sending
+
+# ═══════════════════════════════════════════════════════════════════
+# ENTERPRISE SSO (v2.0)
+# ═══════════════════════════════════════════════════════════════════
+AZURE_AD_CLIENT_ID=xxx                # Azure AD app ID
+AZURE_AD_CLIENT_SECRET=xxx            # Azure AD secret
+AZURE_AD_TENANT_ID=xxx                # Azure AD tenant
+OKTA_CLIENT_ID=xxx                    # Okta app ID
+OKTA_CLIENT_SECRET=xxx                # Okta secret
+OKTA_DOMAIN=xxx.okta.com              # Okta domain
+
+# ═══════════════════════════════════════════════════════════════════
+# VECTOR MEMORY (v2.0)
+# ═══════════════════════════════════════════════════════════════════
+VECTOR_STORE=chromadb                 # chromadb | pinecone | weaviate
+PINECONE_API_KEY=xxx                  # Pinecone API key
+PINECONE_ENVIRONMENT=us-west1-gcp     # Pinecone environment
+WEAVIATE_URL=http://localhost:8080    # Weaviate URL
 ```
 
 ---
@@ -1099,53 +2050,109 @@ docker-compose logs -f
 
 # Stop services
 docker-compose down
+
+# Rebuild images
+docker-compose build --no-cache
 ```
 
-### Production Deployment
+**docker-compose.yml overview:**
+```yaml
+services:
+  backend:
+    build: .
+    ports:
+      - "9000:9000"
+    environment:
+      - SANKALPA_ENV=production
+    depends_on:
+      - postgres
+      - redis
 
-Sankalpa supports deployment to:
+  frontend:
+    build: ./frontend
+    ports:
+      - "9001:9001"
 
-- **Vercel** - Frontend (Next.js)
-- **AWS** - Elastic Beanstalk, ECS, Lambda
-- **GCP** - App Engine, Cloud Run
-- **Azure** - App Service, Container Apps
+  postgres:
+    image: postgres:15
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
-See [Production Deployment Guide](docs/production-deployment.md) for detailed instructions.
+  redis:
+    image: redis:7-alpine
+```
+
+### Kubernetes Deployment (Helm)
+
+```bash
+# Add Sankalpa Helm repository
+helm repo add sankalpa https://charts.sankalpa.dev
+
+# Install with default values
+helm install sankalpa sankalpa/sankalpa
+
+# Install with custom values
+helm install sankalpa sankalpa/sankalpa \
+  --set backend.replicas=3 \
+  --set frontend.replicas=2 \
+  --set redis.enabled=true
+
+# AWS EKS deployment
+helm install sankalpa sankalpa/sankalpa -f deploy/helm/sankalpa/values-aws.yaml
+
+# GCP GKE deployment
+helm install sankalpa sankalpa/sankalpa -f deploy/helm/sankalpa/values-gcp.yaml
+
+# Azure AKS deployment
+helm install sankalpa sankalpa/sankalpa -f deploy/helm/sankalpa/values-azure.yaml
+```
+
+### Production Checklist
+
+- [ ] Set `SANKALPA_ENV=production`
+- [ ] Configure strong `SANKALPA_JWT_SECRET`
+- [ ] Enable HTTPS with valid SSL certificates
+- [ ] Configure proper `SANKALPA_ALLOWED_ORIGINS`
+- [ ] Set up PostgreSQL for database
+- [ ] Set up Redis for caching and sessions
+- [ ] Configure rate limiting
+- [ ] Set up monitoring and alerting
+- [ ] Configure log aggregation
+- [ ] Set up backup procedures
+- [ ] Configure CDN for frontend assets
+
+For detailed deployment instructions, see [docs/deployment-guide.md](./docs/deployment-guide.md).
 
 ---
 
-## Testing
+## Protocols & Integrations
 
-```bash
-# Run all backend tests
-pytest
+Sankalpa integrates multiple AI agent protocols and frameworks:
 
-# Run with coverage
-pytest --cov=sankalpa tests/
+| Protocol | Purpose | Implementation | Location |
+|----------|---------|----------------|----------|
+| **LangChain** | Agent chaining, memory | ChainManager, MemoryManager | `agents/chain_manager.py` |
+| **MCP** | Model Context Protocol | Agent orchestration | `agents/orchestration/` |
+| **CrewAI** | Multi-agent collaboration | Role-based agents | `agents/enhanced/` |
+| **AutoGen** | Task planning | PlannerAgent | `agents/orchestration/planner_agent.py` |
+| **ReAct** | Reasoning + tool use | Copilot, Critic | `agents/enhanced/copilot_agent.py` |
+| **PromptFlow** | Visual workflows | Composer UI | `frontend/pages/composer.tsx` |
+| **GPT Engineer** | Project generation | Builder agents | `agents/builder/` |
+| **BabyAGI** | Task planning | Planning system | `agents/orchestration/` |
 
-# Run frontend tests
-cd frontend && npm test
+### External Integrations
 
-# Run specific test category
-pytest tests/unit/
-pytest tests/integration/
-pytest tests/e2e/
-```
-
----
-
-## CLI Usage
-
-```bash
-# Run the CLI
-python cli/cli.py
-
-# Execute a single agent
-python cli/cli.py run-agent hello_world --input '{"name": "User"}'
-
-# Execute a workflow
-python cli/flow_runner.py composer_flows/example_blog_chain.json
-```
+| Integration | Purpose | Configuration |
+|-------------|---------|---------------|
+| **OpenAI** | LLM generation | `OPENAI_API_KEY` |
+| **GitHub** | Code repositories | `GITHUB_TOKEN` |
+| **Stripe** | Payment processing | `STRIPE_SECRET_KEY` |
+| **SendGrid** | Email delivery | `SENDGRID_API_KEY` |
+| **Azure AD** | Enterprise SSO | `AZURE_AD_*` |
+| **Okta** | Enterprise SSO | `OKTA_*` |
+| **Vercel** | Frontend deployment | Vercel CLI |
+| **AWS** | Cloud deployment | AWS SDK |
+| **GCP** | Cloud deployment | GCP SDK |
 
 ---
 
@@ -1153,7 +2160,8 @@ python cli/flow_runner.py composer_flows/example_blog_chain.json
 
 ### Common Issues
 
-#### Backend won't start
+<details>
+<summary><b>Backend won't start</b></summary>
 
 ```bash
 # Check if port 9000 is in use
@@ -1163,18 +2171,41 @@ lsof -i :9000                  # Linux/Mac
 # Kill the process using the port
 taskkill /PID <pid> /F         # Windows
 kill -9 <pid>                  # Linux/Mac
-```
 
-#### Frontend build fails
+# Try alternative port
+python -m uvicorn backend.simple_main:app --port 9001
+```
+</details>
+
+<details>
+<summary><b>Frontend build fails</b></summary>
 
 ```bash
-# Clear node_modules and reinstall
+# Clear cache and reinstall
 cd frontend
-rm -rf node_modules package-lock.json
+rm -rf node_modules package-lock.json .next
 npm install
+npm run dev
 ```
+</details>
 
-#### Agent not found error
+<details>
+<summary><b>LLM Client not available</b></summary>
+
+```bash
+# Verify OpenAI key is set
+echo $OPENAI_API_KEY
+
+# Add to .env file
+echo "OPENAI_API_KEY=sk-your-key" >> .env
+
+# Restart the backend
+python -m uvicorn backend.enhanced_main:app --reload
+```
+</details>
+
+<details>
+<summary><b>Agent not found error</b></summary>
 
 ```bash
 # Verify agent exists in catalog
@@ -1182,62 +2213,35 @@ cat catalog/agent_catalog.json | grep "agent_name"
 
 # Check agent file exists
 ls agents/custom/
+ls agents/builder/
 ```
+</details>
 
-#### Memory/session issues
+<details>
+<summary><b>CORS errors in browser</b></summary>
 
 ```bash
-# Clear all sessions
-rm -rf memory/sessions/*.json
-
-# Restart the backend
-python -m uvicorn backend.simple_main:app --reload
-```
-
-#### Database connection failed
-
-```bash
-# Check PostgreSQL is running
-pg_isready -h localhost -p 5432
-
-# Verify connection string in .env
-echo $POSTGRES_HOST
-```
-
-#### CORS errors in browser
-
-```bash
-# Add your frontend URL to allowed origins in .env
+# Add your frontend URL to .env
 SANKALPA_ALLOWED_ORIGINS=http://localhost:9001,http://localhost:3000
+
+# Restart backend
 ```
+</details>
 
 ### Debug Mode
 
-Enable verbose logging:
-
 ```bash
-# Set in .env
+# Enable verbose logging
 SANKALPA_DEBUG=true
 SANKALPA_LOG_LEVEL=DEBUG
 
-# Or run with debug flag
-python -m uvicorn backend.simple_main:app --reload --log-level debug
+# Run with debug flag
+python -m uvicorn backend.enhanced_main:app --reload --log-level debug
 ```
-
-### Getting Help
-
-1. Check the [FAQ](#-faq) below
-2. Search [GitHub Issues](https://github.com/sreejagatab/Sankalpa/issues)
-3. Open a new issue with:
-   - Error message
-   - Steps to reproduce
-   - Environment info (OS, Python version, Node version)
 
 ---
 
 ## FAQ
-
-### General Questions
 
 <details>
 <summary><b>What is Sankalpa?</b></summary>
@@ -1248,204 +2252,26 @@ Sankalpa is a multi-agent AI platform that autonomously builds, tests, and deplo
 <details>
 <summary><b>Is Sankalpa free to use?</b></summary>
 
-Yes, Sankalpa is open-source under the MIT license. You can use it freely for personal and commercial projects.
+Yes, Sankalpa is open-source under the MIT license. You can use it freely for personal and commercial projects. LLM features require an OpenAI API key (pay-as-you-go).
 </details>
 
 <details>
 <summary><b>Do I need an OpenAI API key?</b></summary>
 
-The base agents work without an OpenAI key (they generate templates and scaffolds). For AI-powered code generation and intelligent suggestions, you'll need an OpenAI API key or another LLM provider.
-</details>
-
-<details>
-<summary><b>What languages/frameworks does Sankalpa support?</b></summary>
-
-Currently:
-- **Frontend**: Next.js, React, TailwindCSS
-- **Backend**: FastAPI (Python), Express (Node.js coming soon)
-- **Database**: PostgreSQL, SQLite
-- **Deployment**: Vercel, AWS, GCP, Azure
-</details>
-
-### Technical Questions
-
-<details>
-<summary><b>How do I create a custom agent?</b></summary>
-
-1. Create a Python file in `agents/custom/`:
-```python
-from agents.base import BaseAgent
-
-class MyAgent(BaseAgent):
-    def __init__(self):
-        super().__init__("my_agent")
-        self.description = "My custom agent"
-
-    def run(self, input_data):
-        return {"result": "success"}
-```
-
-2. Register in `catalog/agent_catalog.json`
-3. Restart the backend
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed instructions.
-</details>
-
-<details>
-<summary><b>How does memory persistence work?</b></summary>
-
-Sankalpa uses a session-based memory system:
-- Each session has a unique ID
-- Data is stored as JSON files in `memory/sessions/`
-- Agents can save/load context across executions
-- Sessions can be resumed or cleared
-
-```python
-# Save to memory
-memory.save("key", {"data": "value"})
-
-# Load from memory
-data = memory.load("key")
-```
+For basic agent functionality, no. For LLM-powered code generation (recommended), you'll need an OpenAI API key set in your `.env` file.
 </details>
 
 <details>
 <summary><b>Can agents run in parallel?</b></summary>
 
-Yes! The Chain Manager supports:
-- **Sequential**: Agents run one after another
-- **Parallel**: Independent agents run simultaneously
-- **Conditional**: Agents run based on previous results
-
-```json
-{
-  "execution_mode": "parallel",
-  "agents": ["frontend_builder", "backend_builder"]
-}
-```
+Yes! The Chain Manager supports sequential, parallel, and conditional execution modes.
 </details>
 
 <details>
-<summary><b>How do I add authentication to my app?</b></summary>
+<summary><b>How do I create a custom agent?</b></summary>
 
-Use the `auth_builder` agent:
-```bash
-curl -X POST http://localhost:9000/api/agents/execute \
-  -H "Content-Type: application/json" \
-  -d '{"agent_name": "auth_builder", "input_data": {"type": "jwt", "features": ["login", "signup", "password_reset"]}}'
-```
+See the [Creating a Custom Agent](#creating-a-custom-agent) section above.
 </details>
-
-<details>
-<summary><b>What's the difference between agents and chains?</b></summary>
-
-- **Agent**: A single specialized AI that performs one task
-- **Chain**: A workflow that connects multiple agents to complete complex tasks
-
-Think of agents as workers and chains as assembly lines.
-</details>
-
-### Deployment Questions
-
-<details>
-<summary><b>How do I deploy to production?</b></summary>
-
-1. Set production environment variables
-2. Build the frontend: `cd frontend && npm run build`
-3. Use Docker Compose or your preferred hosting
-
-See [docs/deployment-guide.md](./docs/deployment-guide.md) for detailed steps.
-</details>
-
-<details>
-<summary><b>Can I use Sankalpa with my own LLM?</b></summary>
-
-Yes, you can configure custom LLM endpoints in the agent configuration. Support for:
-- OpenAI API-compatible endpoints
-- Local models (Ollama, LM Studio)
-- Azure OpenAI
-- Anthropic Claude
-</details>
-
----
-
-## Development
-
-### Adding a New Agent
-
-1. Create agent file in appropriate category folder:
-
-```python
-# agents/custom/my_agent.py
-from agents.base import BaseAgent
-from typing import Dict, Any
-
-class MyCustomAgent(BaseAgent):
-    def __init__(self, name="my_agent", memory=None):
-        super().__init__(name, memory)
-        self.category = "custom"
-        self.description = "My custom agent description"
-
-    def run(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        # Your agent logic here
-        return {"result": "success", "data": input_data}
-```
-
-2. Register in `catalog/agent_catalog.json`:
-
-```json
-{
-  "my_agent": {
-    "description": "My custom agent",
-    "category": "custom",
-    "module": "agents.custom.my_agent",
-    "class": "MyCustomAgent"
-  }
-}
-```
-
-3. Test your agent:
-
-```bash
-curl -X POST http://localhost:9000/api/agents/execute \
-  -H "Content-Type: application/json" \
-  -d '{"agent_name": "my_agent", "input_data": {"test": true}}'
-```
-
----
-
-## Roadmap
-
-### Current Version (v2.0)
-
-- [x] 35+ specialized agents
-- [x] Visual workflow composer
-- [x] Memory system with sessions
-- [x] Chain execution engine
-- [x] REST API with authentication
-- [x] Next.js frontend
-- [x] Docker deployment
-
-### New in v2.0 (All Completed)
-
-- [x] Real-time WebSocket collaboration (Redis pub/sub)
-- [x] Vector memory with embeddings (ChromaDB, Pinecone, Weaviate)
-- [x] GraphQL API (Strawberry + Apollo Client)
-- [x] Plugin system (50+ hook points)
-- [x] Advanced LLM fine-tuning UI
-- [x] Agent marketplace (complete with publishing/installation)
-- [x] VS Code extension
-- [x] Enterprise SSO (SAML 2.0, OIDC - Azure AD, Okta, Google)
-- [x] Kubernetes Helm charts (AWS EKS, GCP GKE, Azure AKS)
-- [x] Mobile PWA (offline-first, push notifications)
-
-### Future Plans
-
-- [ ] Native mobile apps (iOS/Android)
-- [ ] Multi-language agent support
-- [ ] AI model registry integration
-- [ ] Advanced analytics dashboard
-- [ ] Team collaboration features
 
 ---
 
@@ -1474,15 +2300,50 @@ We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for gu
 | [CLAUDE.md](./CLAUDE.md) | AI assistant quick reference |
 | [docs/API.md](./docs/API.md) | Complete API documentation |
 | [docs/system_architecture.md](./docs/system_architecture.md) | Architecture deep-dive |
-| [docs/deployment-guide.md](./docs/deployment-guide.md) | Deployment guide (Docker, K8s, Cloud) |
+| [docs/deployment-guide.md](./docs/deployment-guide.md) | Deployment guide |
+
+---
+
+## Roadmap
+
+### Current Version (v2.0) - All Complete
+
+- [x] 35+ specialized agents
+- [x] Visual workflow composer
+- [x] Memory system with sessions
+- [x] Chain execution engine with context sharing
+- [x] REST API with authentication
+- [x] Next.js frontend
+- [x] Docker deployment
+- [x] Real-time WebSocket collaboration
+- [x] Vector memory with embeddings
+- [x] GraphQL API
+- [x] Plugin system (50+ hooks)
+- [x] Advanced LLM fine-tuning UI
+- [x] Agent marketplace
+- [x] VS Code extension
+- [x] Enterprise SSO (SAML 2.0, OIDC)
+- [x] Kubernetes Helm charts
+- [x] Mobile PWA
+- [x] OpenAI LLM integration
+
+### Future Plans
+
+- [ ] Native mobile apps (iOS/Android)
+- [ ] Multi-language agent support
+- [ ] AI model registry integration
+- [ ] Advanced analytics dashboard
+- [ ] Team collaboration features
+- [ ] Anthropic Claude integration
+- [ ] Local LLM support (Ollama, LM Studio)
 
 ---
 
 ## Support
 
 - **Documentation**: [docs/](./docs/)
-- **Issues**: Open an issue in this repository
-- **Discussions**: Use GitHub Discussions for questions
+- **Issues**: [GitHub Issues](https://github.com/sreejagatab/Sankalpa/issues)
+- **Discussions**: GitHub Discussions
 
 ---
 
@@ -1508,10 +2369,10 @@ Sankalpa builds upon concepts from:
 
 **Built with intention. Powered by AI.**
 
-[Get Started](#quick-start) | [Documentation](./docs/) | [Contributing](./CONTRIBUTING.md)
+[Get Started](#quick-start) | [Documentation](./docs/) | [Contributing](./CONTRIBUTING.md) | [Report Issue](https://github.com/sreejagatab/Sankalpa/issues)
 
 ---
 
-Made with love by the Sankalpa Team
+Made with intention by the Sankalpa Team
 
 </div>
