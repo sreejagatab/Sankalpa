@@ -28,6 +28,8 @@
 </div>
 
 ---
+<img width="1536" height="1024" alt="20251229_1644_Sankalpa AI Platform_simple_compose_01kdnfxh8ke2gr114mn57p8k0g" src="https://github.com/user-attachments/assets/6e77ebc7-4719-4797-b2ec-9b7f5e024515" />
+---
 
 ## Table of Contents
 
@@ -1676,6 +1678,8 @@ python test_complex_task.py
 ls -la generated_output/
 ```
 
+---
+<img width="1536" height="1024" alt="20251229_1644_Sankalpa AI Platform_simple_compose_01kdnfxh8jfztveq7h3e1sjet7" src="https://github.com/user-attachments/assets/f4d4d199-ce7b-4275-81cf-e6eaea724517" />
 ---
 
 ## API Reference
